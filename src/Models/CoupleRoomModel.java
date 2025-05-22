@@ -7,7 +7,7 @@ public class CoupleRoomModel extends RoomModel {
 
     public CoupleRoomModel(int roomNumber, String roomType, double price, String bedType, String status, int maxOccupancy) {
         super(roomNumber, roomType, price, status);
-        setBedType(bedType);
+        setBedType("King Size");
         setPrice(300);
     }
 

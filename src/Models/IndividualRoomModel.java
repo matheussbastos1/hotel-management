@@ -6,7 +6,7 @@ public class IndividualRoomModel extends RoomModel {
 
     public IndividualRoomModel(int roomNumber, String roomType, double price, String bedType, String status, int maxOccupancy) {
         super(roomNumber, roomType, price, status);
-        this.bedType = bedType;
+        setBedType("Queen Size");
         setPrice(200);
     }
 

@@ -6,7 +6,7 @@ public class FamilyRoomModel extends RoomModel {
 
     public FamilyRoomModel(int roomNumber, String roomType, double price, String bedType, String status, int maxOccupancy) {
         super(roomNumber, roomType, price, status);
-        setBedType(bedType);
+        setBedType("Queen Size");
         setPrice(500);
     }
 
