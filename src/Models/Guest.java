@@ -1,20 +1,24 @@
 package Models;
+;
 
-import java.util.ArrayList;
-
-public class GuestModel {
+public class Guest {
+    private int id;
     private String guestName;
     private String guestEmail;
     private String guestPhone;
     private String guestAddress;
-    private RoomModel room;
+    private Room room;
+    private Reservation reservation;
 
-    public GuestModel(String guestName, String guestEmail, String guestPhone, String guestAddress, ArrayList<GuestModel> guests, RoomModel room) {
+    public Guest(String guestName, String guestEmail, String guestPhone, String guestAddress, Room room, Reservation reservation) {
         this.guestName = guestName;
         this.guestEmail = guestEmail;
         this.guestPhone = guestPhone;
         this.guestAddress = guestAddress;
         this.room = room;
+        this.reservation = reservation;
+        this.id = id++;
+
     }
 
     public String getGuestName() {
@@ -49,12 +53,31 @@ public class GuestModel {
         this.guestAddress = guestAddress;
     }
 
-
-    public RoomModel getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(RoomModel room) {
+    public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
+
+    public int getRoomNumber() {
+        return room.getRoomNumber();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

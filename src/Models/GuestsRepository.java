@@ -1,22 +1,21 @@
 package Models;
 
-import Models.GuestModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GuestsRepository {
-    private List<GuestModel> guests = new ArrayList<>();
+    private List<Guest> guests = new ArrayList<>();
 
-    public void addGuest(GuestModel guest) {
+    public void addGuest(Guest guest) {
         guests.add(guest);
     }
 
-    public List<GuestModel> getAllGuests() {
+    public List<Guest> getAllGuests() {
         return new ArrayList<>(guests);
     }
 
-    public GuestModel findGuestByEmail(String email) {
-        for (GuestModel guest : guests) {
+    public Guest findGuestByEmail(String email) {
+        for (Guest guest : guests) {
             if (guest.getGuestEmail().equals(email)) {
                 return guest;
             }
@@ -24,7 +23,7 @@ public class GuestsRepository {
         return null;
     }
 
-    public void removeGuest(GuestModel guest) {
+    public void removeGuest(Guest guest) {
         guests.remove(guest);
     }
 }
