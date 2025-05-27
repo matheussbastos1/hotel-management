@@ -1,16 +1,20 @@
 package Models;
 
-public class RoomModel {
+public class Room {
     private int roomNumber;
     private String roomType;
     private double price;
-    private String status;
+    private Status status;
+    private int maxOccupancy;
+    private String bedType;
 
-    public RoomModel(int roomNumber, String roomType, double price, String status) {
+    public Room(int roomNumber, String roomType, double price, Status status, int maxOccupancy, String bedType) {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.price = price;
         this.status = status;
+        this.maxOccupancy = maxOccupancy;
+        this.bedType = bedType;
     }
 
     public int getRoomNumber() {
@@ -37,11 +41,27 @@ public class RoomModel {
         this.price = price;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public int getMaxOccupancy() {
+        return maxOccupancy;
+    }
+
+    public void setMaxOccupancy(int maxOccupancy) {
+        this.maxOccupancy = maxOccupancy;
+    }
+
+    public String getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(String bedType) {
+        this.bedType = bedType;
     }
 }

@@ -3,16 +3,16 @@ package Models;
 import java.util.ArrayList;
 
 public class RoomRepository {
-    private ArrayList<RoomModel> rooms = new ArrayList<>();
+    private ArrayList<Room> rooms = new ArrayList<>();
 
-    public void addRoom(RoomModel room) {
+    public void addRoom(Room room) {
         rooms.add(room);
     }
-    public ArrayList<RoomModel> getAllRooms() {
+    public ArrayList<Room> getAllRooms() {
         return new ArrayList<>(rooms);
     }
-    public RoomModel findRoomByNumber(int roomNumber) {
-        for (RoomModel room : rooms) {
+    public Room findRoomByNumber(int roomNumber) {
+        for (Room room : rooms) {
             if (room.getRoomNumber() == roomNumber) {
                 return room;
             }
