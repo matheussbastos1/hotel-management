@@ -26,7 +26,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     @Override
     public List<Reservation> getAllReservations() {
 
-        return this.reservations;
+        return new ArrayList<>(this.reservations);
     }
 
     @Override

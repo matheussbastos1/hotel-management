@@ -34,10 +34,10 @@ public class HotelManagementSystemTest {
         System.out.println("\n--- MÓDULO DE GERENCIAMENTO DE QUARTOS ---");
 
         System.out.println("\n1. Adicionando quartos...");
-        roomRepository.addRoom(new Room(101, RoomType.COUPLE, 250.0, Status.AVAILABLE, 2, "Queen"));
-        roomRepository.addRoom(new Room(102, RoomType.INDIVIDUAL, 150.0, Status.AVAILABLE, 1, "Single"));
-        roomRepository.addRoom(new Room(201, RoomType.FAMILY, 450.0, Status.MAINTENANCE, 5, "King + Twin"));
-        roomRepository.addRoom(new Room(202, RoomType.COUPLE, 280.0, Status.AVAILABLE, 2, "King"));
+        roomRepository.addRoom(new Room(101, RoomType.COUPLE, 250.0, RoomStatus.AVAILABLE, 2, "Queen"));
+        roomRepository.addRoom(new Room(102, RoomType.INDIVIDUAL, 150.0, RoomStatus.AVAILABLE, 1, "Single"));
+        roomRepository.addRoom(new Room(201, RoomType.FAMILY, 450.0, RoomStatus.MAINTENANCE, 5, "King + Twin"));
+        roomRepository.addRoom(new Room(202, RoomType.COUPLE, 280.0, RoomStatus.AVAILABLE, 2, "King"));
         System.out.println("Quartos adicionados com sucesso.");
 
         System.out.println("\n2. Listando todos os quartos:");
@@ -55,7 +55,7 @@ public class HotelManagementSystemTest {
         }
 
         System.out.println("\n5. Atualizando status do quarto 101 para BOOKED...");
-        foundRoom.setStatus(Status.BOOKED);
+        foundRoom.setStatus(RoomStatus.BOOKED);
         roomRepository.updateRoom(foundRoom);
         System.out.println("Status do quarto 101 atualizado para: " + roomRepository.findRoomByNumber(101).getStatus());
 
@@ -104,10 +104,10 @@ public class HotelManagementSystemTest {
         System.out.println("Usando Quarto " + roomForReservation.getRoomNumber() + " e Hóspede " + guestForReservation.getGuestName());
 
         System.out.println("\n2. Criando uma nova reserva...");
-        Reservation res1 = new Reservation(reservationIdCounter++, guestForReservation, roomForReservation, LocalDate.now(), LocalDate.now().plusDays(3), "CONFIRMED");
+        Reservation res1 = new Reservation(reservationIdCounter++, guestForReservation, roomForReservation, LocalDate.now(), LocalDate.now().plusDays(3), ReservationStatus.CHECKED_IN);
 
         reservationRepository.addReservation(res1);
-        roomForReservation.setStatus(Status.BOOKED); // Simula a lógica de negócio de ocupar o quarto
+        roomForReservation.setStatus(RoomStatus.BOOKED); // Simula a lógica de negócio de ocupar o quarto
         roomRepository.updateRoom(roomForReservation);
         System.out.println("Reserva ID " + res1.getReservationId() + " criada. Status do quarto " + roomForReservation.getRoomNumber() + " atualizado para BOOKED.");
 
@@ -127,7 +127,7 @@ public class HotelManagementSystemTest {
 
         System.out.println("\n6. Removendo reserva ID " + res1.getReservationId() + "...");
         reservationRepository.removeReservation(foundReservation);
-        roomForReservation.setStatus(Status.AVAILABLE); // Libera o quarto após o cancelamento
+        roomForReservation.setStatus(RoomStatus.AVAILABLE); // Libera o quarto após o cancelamento
         roomRepository.updateRoom(roomForReservation);
         System.out.println("Reserva removida. Status do quarto " + roomForReservation.getRoomNumber() + " atualizado para AVAILABLE.");
         System.out.println("Total de reservas agora: " + reservationRepository.getAllReservations().size());

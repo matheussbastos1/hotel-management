@@ -3,7 +3,7 @@ package repository;
 import service.exceptions.RoomNotFoundException;
 import service.models.Room;
 import service.models.RoomType;
-import service.models.Status;
+import service.models.RoomStatus;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public interface RoomRepository {
 
     List<Room> getRoomsByType(RoomType roomType);
 
-    List<Room> getRoomsByStatus(Status status);
+    List<Room> getRoomsByStatus(RoomStatus roomStatus);
 }

@@ -1,10 +1,14 @@
 package service.models;
 
+import service.models.Guest;
+import service.models.Reservation;
+import service.models.Room;
+
 import java.time.LocalDate;
 
 public class Stay {
     private int stayId;
-    private int roomNumber;
+    private Room room;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private String status;
@@ -14,11 +18,17 @@ public class Stay {
     public Stay(int stayId, Reservation reservation, String status) {
         this.stayId = stayId;
         this.reservation = reservation;
-        this.roomNumber = reservation.getRoom().getRoomNumber(); // Usando o getter de Room via Reservation
-        this.checkInDate = reservation.getCheckInDate();
-        this.checkOutDate = reservation.getCheckOutDate();
         this.status = status;
+
+
+        if (reservation != null) {
+            this.room = reservation.getRoom();
+            this.guest = reservation.getGuest();
+            this.checkInDate = reservation.getCheckInDate();
+            this.checkOutDate = reservation.getCheckOutDate();
+        }
     }
+
 
     public Reservation getReservation() {
         return reservation;
@@ -26,5 +36,53 @@ public class Stay {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    public int getStayId() {
+        return stayId;
+    }
+
+    public void setStayId(int stayId) {
+        this.stayId = stayId;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LocalDate getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 }
