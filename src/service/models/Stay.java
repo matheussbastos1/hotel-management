@@ -1,4 +1,4 @@
-package Models;
+package service.models;
 
 import java.time.LocalDate;
 
@@ -7,7 +7,6 @@ public class Stay {
     private int roomNumber;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String guestName;
     private String status;
     private Reservation reservation;
     private Guest guest;
@@ -16,7 +15,6 @@ public class Stay {
         this.stayId = stayId;
         this.reservation = reservation;
         this.roomNumber = reservation.getRoom().getRoomNumber(); // Usando o getter de Room via Reservation
-        this.guestName = reservation.getGuest(guest).getGuestName(); // Usando o getter de Guest via Reservation
         this.checkInDate = reservation.getCheckInDate();
         this.checkOutDate = reservation.getCheckOutDate();
         this.status = status;

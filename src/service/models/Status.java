@@ -1,4 +1,4 @@
-package Models;
+package service.models;
 
 public enum Status {
     AVAILABLE("Available"),
