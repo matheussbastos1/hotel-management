@@ -8,10 +8,10 @@ public class Reservation {
     private Room room;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String status;
+    private ReservationStatus status;
 
     // Construtor corrigido: recebe o ID e atribui o guest
-    public Reservation(int reservationId, Guest guest, Room room, LocalDate checkInDate, LocalDate checkOutDate, String status) {
+    public Reservation(int reservationId, Guest guest, Room room, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status) {
         this.reservationId = reservationId;
         this.guest = guest;
         this.room = room;
@@ -60,11 +60,11 @@ public class Reservation {
         this.checkOutDate = checkOutDate;
     }
 
-    public String getStatus() {
+    public ReservationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReservationStatus status) {
         this.status = status;
     }
 }

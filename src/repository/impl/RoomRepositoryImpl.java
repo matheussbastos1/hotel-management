@@ -4,7 +4,7 @@ import repository.RoomRepository;
 import service.exceptions.RoomNotFoundException;
 import service.models.Room;
 import service.models.RoomType;
-import service.models.Status;
+import service.models.RoomStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     public List<Room> getAvailableRooms() {
         List<Room> availableRooms = new ArrayList<>();
         for (Room room : rooms) {
-            if (room.getStatus() == Status.AVAILABLE) {
+            if (room.getStatus() == RoomStatus.AVAILABLE) {
                 availableRooms.add(room);
             }
         }
@@ -69,10 +69,10 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Room> getRoomsByStatus(Status status) {
+    public List<Room> getRoomsByStatus(RoomStatus roomStatus) {
         List<Room> roomsByStatus = new ArrayList<>();
         for (Room room : rooms) {
-            if (room.getStatus() == status) {
+            if (room.getStatus() == roomStatus) {
                 roomsByStatus.add(room);
             }
         }
