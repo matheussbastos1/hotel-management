@@ -8,8 +8,6 @@ public class Guest {
     private String guestEmail;
     private String guestPhone;
     private String guestAddress;
-    private Room room;
-    private Reservation reservation;
 
 
     public Guest(Long id, String guestName, String guestEmail, String guestPhone, String guestAddress) {
@@ -18,8 +16,7 @@ public class Guest {
         this.guestEmail = guestEmail;
         this.guestPhone = guestPhone;
         this.guestAddress = guestAddress;
-        this.room = null; //modificado para que o hóspede não precise estar necessariamente vinculado a um quarto.
-        this.reservation = null; //modificado para que o hóspede não precise estar necessariamente vinculado a uma reserva
+
     }
 
     public String getGuestName() {
@@ -54,21 +51,6 @@ public class Guest {
         this.guestAddress = guestAddress;
     }
 
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
 
     public Long getId() {
         return id;
