@@ -1,7 +1,9 @@
 package service.models;
 
+//Essa classe representa um hóspede em um sistema de reservas de hotel.
+
 public class Guest {
-    private int id;
+    private Long id;
     private String guestName;
     private String guestEmail;
     private String guestPhone;
@@ -9,15 +11,15 @@ public class Guest {
     private Room room;
     private Reservation reservation;
 
-    // Construtor corrigido: não depende mais de Room ou Reservation
-    public Guest(int id, String guestName, String guestEmail, String guestPhone, String guestAddress) {
+
+    public Guest(Long id, String guestName, String guestEmail, String guestPhone, String guestAddress) {
         this.id = id;
         this.guestName = guestName;
         this.guestEmail = guestEmail;
         this.guestPhone = guestPhone;
         this.guestAddress = guestAddress;
-        this.room = null; // Pode ser definido depois
-        this.reservation = null; // Pode ser definido depois
+        this.room = null; //modificado para que o hóspede não precise estar necessariamente vinculado a um quarto.
+        this.reservation = null; //modificado para que o hóspede não precise estar necessariamente vinculado a uma reserva
     }
 
     public String getGuestName() {
@@ -68,11 +70,12 @@ public class Guest {
         this.reservation = reservation;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
+
         this.id = id;
     }
 }

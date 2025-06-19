@@ -2,8 +2,10 @@ package service.models;
 
 import java.time.LocalDate;
 
+//Essa classe representa uma reserva de um hóspede em um hotel, vinculada a um quarto específico e com datas de check-in e check-out.
+
 public class Reservation {
-    private int reservationId;
+    private Long reservationId;
     private Guest guest;
     private Room room;
     private LocalDate checkInDate;
@@ -11,7 +13,7 @@ public class Reservation {
     private ReservationStatus status;
 
     // Construtor corrigido: recebe o ID e atribui o guest
-    public Reservation(int reservationId, Guest guest, Room room, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status) {
+    public Reservation(Long reservationId, Guest guest, Room room, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status) {
         this.reservationId = reservationId;
         this.guest = guest;
         this.room = room;
@@ -20,11 +22,11 @@ public class Reservation {
         this.status = status;
     }
 
-    public int getReservationId() {
+    public Long getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(int reservationId) {
+    public void setReservationId(Long reservationId) {
         this.reservationId = reservationId;
     }
 

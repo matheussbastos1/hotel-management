@@ -6,8 +6,10 @@ import service.models.Room;
 
 import java.time.LocalDate;
 
+//Essa classe representa uma estadia de um hóspede em um hotel, vinculada a uma reserva específica.
+
 public class Stay {
-    private int stayId;
+    private Long stayId;
     private Room room;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -15,7 +17,7 @@ public class Stay {
     private Reservation reservation;
     private Guest guest;
 
-    public Stay(int stayId, Reservation reservation, String status) {
+    public Stay(Long stayId, Reservation reservation, String status) {
         this.stayId = stayId;
         this.reservation = reservation;
         this.status = status;
@@ -38,11 +40,11 @@ public class Stay {
         this.reservation = reservation;
     }
 
-    public int getStayId() {
+    public Long getStayId() {
         return stayId;
     }
 
-    public void setStayId(int stayId) {
+    public void setStayId(Long stayId) {
         this.stayId = stayId;
     }
 

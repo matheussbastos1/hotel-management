@@ -1,81 +1,54 @@
 package service.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+//Essa classe representa uma fatura gerada para uma estadia de um hóspede.
 
 public class Invoice {
-    private Long invoiceId;
-    private BigDecimal amountSpent;
+    private int invoiceId;
     private Stay stay;
-    private LocalDate issueDate;
-    private LocalDate dueDate;
-    private boolean isPaid;
-    private ArrayList<Payment> payment;
+    private Map<String, BigDecimal> charges;
+    private BigDecimal amountSpent;
+    private boolean paid;
+    private List<Payment> payments;
 
-    public Invoice(Long invoiceId, BigDecimal amountSpent, Stay stay, LocalDate issueDate, LocalDate dueDate, boolean isPaid) {
+    public Invoice(int invoiceId, Stay stay, Map<String, BigDecimal> charges) {
         this.invoiceId = invoiceId;
-        this.amountSpent = amountSpent;
         this.stay = stay;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
-        this.isPaid = isPaid;
-        this.payment = new ArrayList<>();
+        this.charges = charges;
+        this.amountSpent = charges.values().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.paid = false;
+        this.payments = new ArrayList<>();
     }
 
-    public Long getInvoiceId() {
+    public int getInvoiceId() {
         return invoiceId;
-    }
-
-    public void setInvoiceId(Long invoiceId) {
-        this.invoiceId = invoiceId;
     }
 
     public BigDecimal getAmountSpent() {
         return amountSpent;
     }
 
-    public void setAmountSpent(BigDecimal amountSpent) {
-        this.amountSpent = amountSpent;
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     public Stay getStay() {
         return stay;
     }
 
-    public void setStay(Stay stay) {
-        this.stay = stay;
+    public List<Payment> getPayments() {
+        return payments;
     }
 
-    public LocalDate getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(LocalDate issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public boolean isPaid() {
-        return isPaid;
-    }
-
-    public void setPaid(boolean paid) {
-        isPaid = paid;
-    }
-
-    public ArrayList<Payment> getPayment() {
-        return payment;
-    }
-
-    public void setPayment(ArrayList<Payment> payment) {
-        this.payment = payment;
+    public void addPayment(Payment payment) {
+        this.payments.add(payment);
     }
 }

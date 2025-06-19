@@ -1,5 +1,7 @@
 package service.models;
 
+//Essa classe representa um hóspede em um sistema de reservas de hotel.
+
 public class Room {
     private int roomNumber;
     private RoomType roomType;
