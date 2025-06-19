@@ -1,5 +1,4 @@
-package Models;
-;
+package service.models;
 
 public class Guest {
     private int id;
@@ -10,15 +9,15 @@ public class Guest {
     private Room room;
     private Reservation reservation;
 
-    public Guest(String guestName, String guestEmail, String guestPhone, String guestAddress, Room room, Reservation reservation) {
+    // Construtor corrigido: não depende mais de Room ou Reservation
+    public Guest(int id, String guestName, String guestEmail, String guestPhone, String guestAddress) {
+        this.id = id;
         this.guestName = guestName;
         this.guestEmail = guestEmail;
         this.guestPhone = guestPhone;
         this.guestAddress = guestAddress;
-        this.room = room;
-        this.reservation = reservation;
-        this.id = id++;
-
+        this.room = null; // Pode ser definido depois
+        this.reservation = null; // Pode ser definido depois
     }
 
     public String getGuestName() {
@@ -67,10 +66,6 @@ public class Guest {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
-    }
-
-    public int getRoomNumber() {
-        return room.getRoomNumber();
     }
 
     public int getId() {
