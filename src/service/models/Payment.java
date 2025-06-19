@@ -1,52 +1,29 @@
 package service.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//Essa classe representa um pagamento realizado por um hóspede para uma fatura específica.
+
 public class Payment {
-    private Long paymentId;
+    private int paymentId;
     private Invoice invoice;
+    private BigDecimal amount;
     private LocalDateTime paymentDate;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
 
-    public Payment(Long paymentId, Invoice invoice, LocalDateTime paymentDate, PaymentMethod paymentMethod, PaymentStatus paymentStatus) {
+    public Payment(int paymentId, Invoice invoice, BigDecimal amount, PaymentMethod paymentMethod) {
         this.paymentId = paymentId;
         this.invoice = invoice;
-        this.paymentDate = paymentDate;
+        this.amount = amount;
         this.paymentMethod = paymentMethod;
-        this.paymentStatus = paymentStatus;
+        this.paymentDate = LocalDateTime.now();
+        this.paymentStatus = PaymentStatus.PENDING; // Status inicial
     }
 
-    public Long getPaymentId() {
+    public int getPaymentId() {
         return paymentId;
-    }
-
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
     }
 
     public PaymentStatus getPaymentStatus() {
@@ -55,5 +32,21 @@ public class Payment {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
     }
 }
