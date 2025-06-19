@@ -1,23 +1,21 @@
-package Models;
-;
+package service.models;
+
+//Essa classe representa um hóspede em um sistema de reservas de hotel.
 
 public class Guest {
-    private int id;
+    private Long id;
     private String guestName;
     private String guestEmail;
     private String guestPhone;
     private String guestAddress;
-    private Room room;
-    private Reservation reservation;
 
-    public Guest(String guestName, String guestEmail, String guestPhone, String guestAddress, Room room, Reservation reservation) {
+
+    public Guest(Long id, String guestName, String guestEmail, String guestPhone, String guestAddress) {
+        this.id = id;
         this.guestName = guestName;
         this.guestEmail = guestEmail;
         this.guestPhone = guestPhone;
         this.guestAddress = guestAddress;
-        this.room = room;
-        this.reservation = reservation;
-        this.id = id++;
 
     }
 
@@ -53,31 +51,13 @@ public class Guest {
         this.guestAddress = guestAddress;
     }
 
-    public Room getRoom() {
-        return room;
-    }
 
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
-
-    public int getRoomNumber() {
-        return room.getRoomNumber();
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
+
         this.id = id;
     }
 }

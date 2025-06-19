@@ -1,14 +1,16 @@
-package Models;
+package service.models;
+
+//Essa classe representa um hóspede em um sistema de reservas de hotel.
 
 public class Room {
     private int roomNumber;
-    private String roomType;
+    private RoomType roomType;
     private double price;
-    private Status status;
+    private RoomStatus status;
     private int maxOccupancy;
     private String bedType;
 
-    public Room(int roomNumber, String roomType, double price, Status status, int maxOccupancy, String bedType) {
+    public Room(int roomNumber, RoomType roomType, double price, RoomStatus status, int maxOccupancy, String bedType) {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.price = price;
@@ -25,11 +27,11 @@ public class Room {
         this.roomNumber = roomNumber;
     }
 
-    public String getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(String roomType) {
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 
@@ -41,12 +43,12 @@ public class Room {
         this.price = price;
     }
 
-    public Status getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(RoomStatus roomStatus) {
+        this.status = roomStatus;
     }
 
     public int getMaxOccupancy() {

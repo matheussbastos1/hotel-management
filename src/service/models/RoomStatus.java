@@ -1,6 +1,6 @@
-package Models;
+package service.models;
 
-public enum Status {
+public enum RoomStatus {
     AVAILABLE("Available"),
     BOOKED("Booked"),
     MAINTENANCE("Maintenance"),
@@ -8,7 +8,7 @@ public enum Status {
 
     private final String status;
 
-    Status(String status) {
+    RoomStatus(String status) {
         this.status = status;
     }
 
