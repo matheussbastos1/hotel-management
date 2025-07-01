@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.example.Hotel-management' is invalid and this project uses 'com.example.Hotel_management' instead.
+* The original package name 'com.example.Hotel-management' is invalid and this project uses 'com.example.hotelmenagement' instead.
 
 # Getting Started
 
