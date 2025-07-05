@@ -15,4 +15,5 @@ public class Guest {
     private String Email;
     private String Phone;
     private String Address;
+    private String Cpf;
 }
