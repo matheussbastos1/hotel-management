@@ -15,26 +15,27 @@ public class RoomController extends AbstractController<Room> {
     }
 
     @Override
-    protected boolean add(Room room) {
+    public boolean add(Room room) { // AGORA É PUBLIC
         roomRepository.addRoom(room);
         return true;
     }
 
     @Override
-    protected boolean update(Room room) throws RoomNotFoundException {
+    public boolean update(Room room) throws RoomNotFoundException { // AGORA É PUBLIC
         roomRepository.updateRoom(room);
         return true;
     }
 
     @Override
-    protected boolean remove(int id) throws RoomNotFoundException {
+    public boolean remove(int id) throws RoomNotFoundException { // AGORA É PUBLIC
+        // O findRoomByNumber já existe no repositório e é usado aqui
         Room room = roomRepository.findRoomByNumber(id);
         roomRepository.removeRoom(room);
         return true;
     }
 
     @Override
-    public List<Room> findAll() throws RoomNotFoundException {
+    public List<Room> findAll() throws RoomNotFoundException { // JÁ ERA PUBLIC
         List<Room> rooms = roomRepository.getAllRooms();
         if (rooms.isEmpty()) {
             throw new RoomNotFoundException("Nenhum quarto encontrado.");
@@ -43,9 +44,10 @@ public class RoomController extends AbstractController<Room> {
     }
 
     @Override
-    public Optional<Room> findById(int id) throws RoomNotFoundException {
+    public Optional<Room> findById(int id) throws RoomNotFoundException { // JÁ ERA PUBLIC
+        // Este método 'findById' é a implementação do 'findByNumber' que o Copilot mencionou.
+        // O FXMLController chamará 'findById'.
         Room room = roomRepository.findRoomByNumber(id);
         return Optional.of(room);
     }
-
 }
