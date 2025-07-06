@@ -18,9 +18,10 @@
                 <Button styleClass="nav-button" onAction="#handleAbrirCadastroGeral" mnemonicParsing="false" prefWidth="160.0" text="Cadastro Geral"/>
                 <Button styleClass="nav-button" mnemonicParsing="false" prefWidth="160.0" text="Hóspedes" />
                 <Button styleClass="nav-button" mnemonicParsing="false" prefWidth="160.0" text="Reservas" />
-                <Button styleClass="nav-button" mnemonicParsing="false" prefWidth="160.0" text="Quartos" />
                 <Button styleClass="nav-button" mnemonicParsing="false" prefWidth="160.0" text="Check-In/Out" />
                 <Button text="Relatórios" onAction="#handleAbrirRelatorios" styleClass="nav-button" prefWidth="160.0" />
+                <Button onAction="#handleAbrirCadastroQuarto" styleClass="nav-button" text="Gerenciar Quartos" prefWidth="160.0"/>
+                <Button onAction="#handleAbrirGestaoServicos" styleClass="nav-button" text="Gerenciar Serviços" prefWidth="160.0"/>
             </children>
         </VBox>
     </left>

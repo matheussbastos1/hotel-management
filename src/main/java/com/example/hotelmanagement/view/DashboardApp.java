@@ -20,6 +20,7 @@ public class DashboardApp extends Application {
             Scene scene = new Scene(root);
 
 
+
             primaryStage.setTitle("Sistema de Gestão Hoteleira");
 
 

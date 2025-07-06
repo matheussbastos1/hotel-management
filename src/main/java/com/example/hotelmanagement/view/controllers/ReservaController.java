@@ -14,6 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import com.example.hotelmanagement.controller.RoomController;
+import com.example.hotelmanagement.repository.impl.RoomRepositoryImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +23,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class ReservaController {
-
+    private RoomController roomController;
+    public void setRoomController(RoomController roomController)
+    {this.roomController = roomController;}
     private final GuestRepository guestRepository = new GuestRepositoryImpl();
     private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+
 
     @FXML private TextField nameField;
     @FXML private TextField cpfld;
@@ -40,9 +45,6 @@ public class ReservaController {
 
     @FXML
     public void initialize() {
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
-        hospedesSpinner.setValueFactory(valueFactory);
-        hospedesSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateCompanionForms(newValue));
         loadAvailableRooms();
     }
 
@@ -107,10 +109,12 @@ public class ReservaController {
         }
     }
 
+    // ReservaController.java
     private void loadAvailableRooms() {
-        Room room101 = new Room(101, null, 250.0, null, 2, "Casal");
-        Room room102 = new Room(102, null, 220.0, null, 2, "Solteiro Duplo");
-        roomComboBox.setItems(FXCollections.observableArrayList(room101, room102));
+        if (roomController != null) {
+            List<Room> rooms = roomController.getAvailableRooms();
+            roomComboBox.setItems(FXCollections.observableArrayList(rooms));
+        }
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

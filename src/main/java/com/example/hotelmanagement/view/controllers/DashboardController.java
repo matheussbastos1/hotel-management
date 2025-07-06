@@ -2,6 +2,8 @@ package com.example.hotelmanagement.view.controllers;
 
 
 
+import com.example.hotelmanagement.controller.RoomController;
+import com.example.hotelmanagement.repository.impl.RoomRepositoryImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,22 +22,19 @@ public class DashboardController {
     @FXML
     private void handleAbrirCadastroGeral(ActionEvent event) {
         try {
-            // Carrega o arquivo FXML da tela de cadastro.
-            // MUDE O NOME "ReservaView.fxml" se o seu arquivo tiver outro nome.
-            Parent cadastroRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/GeneralReserve.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneralReserve.fxml"));
+            Parent cadastroRoot = loader.load();
+            ReservaController reservaController = loader.getController();
+            // Use a mesma instância de RoomController
+            reservaController.setRoomController(new RoomController(new RoomRepositoryImpl()));
 
-            // Pega a janela (Stage) atual a partir do botão que foi clicado.
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Coloca a nova tela na janela.
             stage.setScene(new Scene(cadastroRoot));
-            stage.setTitle("Cadastro Geral"); // Muda o título da janela
+            stage.setTitle("Cadastro Geral");
             stage.show();
-
         } catch (IOException e) {
             System.err.println("FALHA AO CARREGAR A TELA DE CADASTRO:");
             e.printStackTrace();
-
         }
     }
 
@@ -51,34 +50,41 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleAbrirCadastroQuarto(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RoomForm.fxml"));
+            Parent root = loader.load();
+            RoomFormController controller = loader.getController();
+            controller.setRoomController(new RoomController(new RoomRepositoryImpl()));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Gestão de Quartos");
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("ERRO: Falha ao carregar a tela de Quartos.");
+            e.printStackTrace();
+        }
+    }
 
 
     @FXML
-    private void handleAbrirTelaDeReservas(ActionEvent event) {
+    private void handleAbrirGestaoServicos(ActionEvent event) {
         try {
-            // 1. Carrega o arquivo FXML da tela que você quer abrir.
-            //    !! MUITA ATENÇÃO AQUI !!
-            //    O nome "/GuestRegistrationForm.fxml" deve ser EXATAMENTE igual ao seu arquivo na pasta 'resources'.
-            Parent telaDeReservasRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/GeneralReserve.fxml")));
-
-            // 2. Pega a janela (Stage) atual a partir do botão que foi clicado.
+            // !! Use o nome exato do seu arquivo FXML de serviços !!
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ServicesForm.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // 3. Cria uma nova cena com a tela de reserva.
-            Scene scene = new Scene(telaDeReservasRoot);
-
-            // 4. Define a nova cena na janela, efetivamente "trocando de tela".
-            stage.setScene(scene);
-            stage.setTitle("Nova Reserva"); // Opcional: muda o título da janela
-            stage.show(); // Garante que a janela seja exibida
-
-        } catch (IOException | NullPointerException e) {
-            System.err.println("ERRO CRÍTICO AO NAVEGAR: Não foi possível carregar o arquivo FXML da tela de reserva.");
-            System.err.println("Verifique se o nome do arquivo em 'getResource()' está correto e se o arquivo está na pasta 'resources'.");
+            stage.setScene(new Scene(root));
+            stage.setTitle("Gestão de Serviços");
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("ERRO: Falha ao carregar a tela de Serviços.");
             e.printStackTrace();
-            // Aqui seria um bom lugar para mostrar um Alert de erro para o usuário.
         }
     }
+
+
+
 
     // Você pode adicionar outros métodos para outros botões aqui...
     // @FXML

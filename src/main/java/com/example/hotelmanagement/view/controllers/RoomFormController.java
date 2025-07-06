@@ -1,4 +1,4 @@
-package com.example.hotelmanagement.view;
+package com.example.hotelmanagement.view.controllers;
 
 import com.example.hotelmanagement.controller.RoomController;
 import com.example.hotelmanagement.models.Room;
@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RoomFormController {
