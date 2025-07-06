@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.StayController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="Gerenciamento de Estadias">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER" spacing="10.0">
+            <children>
+                <TextField fx:id="searchField" prefHeight="25.0" prefWidth="250.0" promptText="Número da Reserva ou CPF do Hóspede" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleSearch" text="Buscar" />
+            </children>
+        </HBox>
+        <Separator prefWidth="200.0" />
+        <GridPane hgap="10.0" vgap="5.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="440.0" minWidth="10.0" prefWidth="440.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="ID da Reserva:" />
+                <Label text="Hóspede:" GridPane.rowIndex="1" />
+                <Label text="Quarto:" GridPane.rowIndex="2" />
+                <Label text="Check-in Previsto:" GridPane.rowIndex="3" />
+                <Label text="Check-out Previsto:" GridPane.rowIndex="4" />
+                <Label text="Status da Reserva:" GridPane.rowIndex="5" />
+                <Label fx:id="reservationIdLabel" text="-" GridPane.columnIndex="1" />
+                <Label fx:id="guestNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="roomDetailsLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="checkInDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label fx:id="checkOutDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label fx:id="reservationStatusLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            </children>
+        </GridPane>
+        <HBox alignment="CENTER" spacing="10.0">
+            <children>
+                <Button fx:id="checkInButton" disable="true" mnemonicParsing="false" onAction="#handleCheckIn" prefWidth="120.0" text="Realizar Check-in" />
+                <Button fx:id="checkOutButton" disable="true" mnemonicParsing="false" onAction="#handleCheckOut" prefWidth="120.0" text="Realizar Check-out" />
+            </children>
+        </HBox>
+        <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER" textFill="RED" wrapText="true" />
+    </children>
+</VBox>
