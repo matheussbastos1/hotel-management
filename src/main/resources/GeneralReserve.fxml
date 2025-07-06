@@ -55,6 +55,7 @@
                     <children>
                         <Button onAction="#handleSalvarReserva" mnemonicParsing="false" styleClass="save-button" text="Salvar Reserva" />
                         <Button mnemonicParsing="false" text="Cancelar" />
+                        <Button text="Voltar" onAction="#handleVoltar" />
                     </children>
                 </HBox>
             </children>

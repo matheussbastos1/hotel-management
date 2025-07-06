@@ -5,17 +5,19 @@ import com.example.hotelmanagement.models.Reservation;
 import com.example.hotelmanagement.models.Room;
 import com.example.hotelmanagement.repository.GuestRepository;
 import com.example.hotelmanagement.repository.ReservationRepository;
+import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.impl.GuestRepositoryImpl;
 import com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl;
+import com.example.hotelmanagement.repository.impl.RoomRepositoryImpl;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import com.example.hotelmanagement.controller.RoomController;
-import com.example.hotelmanagement.repository.impl.RoomRepositoryImpl;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,15 +25,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class ReservaController {
-    private RoomController roomController;
-    public void setRoomController(RoomController roomController)
-    {this.roomController = roomController;}
+
+    // --- Repositórios para Acesso aos Dados ---
     private final GuestRepository guestRepository = new GuestRepositoryImpl();
     private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+    private final RoomRepository roomRepository = new RoomRepositoryImpl();
 
-
+    // --- Componentes da Tela (Ligados ao FXML) ---
     @FXML private TextField nameField;
-    @FXML private TextField cpfld;
+    @FXML private TextField cpfld; // Adicionado para corresponder ao seu FXML
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private TextField addressField;
@@ -41,16 +43,29 @@ public class ReservaController {
     @FXML private Spinner<Integer> hospedesSpinner;
     @FXML private VBox companionsVBox;
 
+    // Lista para guardar a referência dos formulários de acompanhantes
     private final List<Node> companionForms = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        // Configura o Spinner
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
+        hospedesSpinner.setValueFactory(valueFactory);
+
+        // Adiciona o "ouvinte" que reage a mudanças no Spinner
+        hospedesSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateCompanionForms(newValue));
+
+        // Carrega a lista de quartos disponíveis
         loadAvailableRooms();
     }
 
+    /**
+     * Adiciona ou remove os "mini-formulários" de acompanhantes na tela.
+     */
     private void updateCompanionForms(int totalHospedes) {
         companionsVBox.getChildren().clear();
         companionForms.clear();
+
         int numeroDeAcompanhantes = totalHospedes - 1;
         if (numeroDeAcompanhantes <= 0) return;
 
@@ -65,15 +80,18 @@ public class ReservaController {
         }
     }
 
+    /**
+     * Ação do botão "Salvar Reserva".
+     */
     @FXML
     private void handleSalvarReserva() {
         try {
             Guest principalGuest = new Guest();
             principalGuest.setName(nameField.getText());
+            principalGuest.setCpf(cpfld.getText());
             principalGuest.setEmail(emailField.getText());
             principalGuest.setPhone(phoneField.getText());
             principalGuest.setAddress(addressField.getText());
-            principalGuest.setCpf(cpfld.getText());
 
             guestRepository.addGuest(principalGuest);
 
@@ -85,9 +103,9 @@ public class ReservaController {
                 if (name != null && !name.getText().isEmpty()) {
                     Guest companion = new Guest();
                     companion.setName(name.getText());
-                    companion.setEmail(doc.getText()); // Usando campo email para doc
+                    companion.setCpf(doc.getText());
                     companionsList.add(companion);
-                    guestRepository.addGuest(companion);
+                    // Lembre-se: não salvamos acompanhantes no repositório de guests
                 }
             }
 
@@ -108,13 +126,22 @@ public class ReservaController {
             showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro ao salvar: " + e.getMessage());
         }
     }
-
-    // ReservaController.java
-    private void loadAvailableRooms() {
-        if (roomController != null) {
-            List<Room> rooms = roomController.getAvailableRooms();
-            roomComboBox.setItems(FXCollections.observableArrayList(rooms));
+    @FXML
+    private void handleVoltar(javafx.event.ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Principal");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void loadAvailableRooms() {
+        List<Room> availableRooms = roomRepository.getAvailableRooms();
+        roomComboBox.setItems(FXCollections.observableArrayList(availableRooms));
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
@@ -127,6 +154,7 @@ public class ReservaController {
 
     private void limparCampos() {
         nameField.clear();
+        cpfld.clear();
         emailField.clear();
         phoneField.clear();
         addressField.clear();

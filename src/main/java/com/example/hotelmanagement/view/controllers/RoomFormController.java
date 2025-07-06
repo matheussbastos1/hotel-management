@@ -8,11 +8,16 @@ import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundE
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -97,6 +102,19 @@ public class RoomFormController {
                 showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro ao salvar o quarto: " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    private void handleVoltar(javafx.event.ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Principal");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

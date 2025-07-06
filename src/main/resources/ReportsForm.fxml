@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.ReportsController">
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.ReportsController">
     <padding>
-        <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
     <children>
         <Label text="Relatório Geral de Reservas">
@@ -18,10 +16,10 @@
             </font>
         </Label>
 
-        <TableView fx:id="reportsTableView" VBox.vgrow="ALWAYS">
+        <TableView fx:id="reportsTableView" prefWidth="1252.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="reservationIdColumn" text="ID Reserva" />
-                <TableColumn fx:id="guestNameColumn" text="Hóspede Principal" prefWidth="150.0"/>
+                <TableColumn fx:id="guestNameColumn" prefWidth="150.0" text="Hóspede Principal" />
                 <TableColumn fx:id="checkInDateColumn" text="Check-In" />
                 <TableColumn fx:id="checkOutDateColumn" text="Check-Out" />
                 <TableColumn fx:id="reservationStatusColumn" text="Status Reserva" />
@@ -34,9 +32,10 @@
                 <TableColumn fx:id="isPaidColumn" text="Pago?" />
                 <TableColumn fx:id="paymentMethodColumn" text="Método Pgto." />
 
-                <TableColumn fx:id="guestEmailColumn" text="Email" prefWidth="180.0"/>
-                <TableColumn fx:id="guestPhoneColumn" text="Telefone" prefWidth="120.0"/>
+                <TableColumn fx:id="guestEmailColumn" prefWidth="180.0" text="Email" />
+                <TableColumn fx:id="guestPhoneColumn" prefWidth="120.0" text="Telefone" />
             </columns>
         </TableView>
+        <Button text="Voltar" onAction="#handleVoltar" />
     </children>
 </VBox>
