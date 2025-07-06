@@ -225,12 +225,6 @@ public class StayController {
             return;
         }
 
-        // Simulação de verificação de pagamento (você pode expandir isso)
-        // Para uma versão simples, vamos considerar que o pagamento é "feito" ou ignoramos.
-        // Se a fatura fosse necessária, você buscaria via invoiceService.findInvoicesForReservation(currentReservation)
-        // e verificaria invoice.isPaid()
-        // Por agora, vamos permitir o check-out sem verificação de pagamento.
-
         try {
             // Usa o ReservationService para a lógica de negócio
             Reservation updatedReservation = reservationService.performCheckOut(currentReservation.getReservationId());
