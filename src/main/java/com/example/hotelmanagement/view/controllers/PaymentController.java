@@ -149,6 +149,7 @@ public class PaymentController {
         }
     }
 
+
     @FXML
     private void handleGenerateBankSlip() {
         Random rand = new Random();
