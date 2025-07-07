@@ -7,7 +7,8 @@ import com.example.hotelmanagement.repository.repositoryExceptions.GuestNotFound
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuestRepositoryImpl implements GuestRepository {
+public class
+GuestRepositoryImpl implements GuestRepository {
 
 
     private final List<Guest> guests = new ArrayList<>();

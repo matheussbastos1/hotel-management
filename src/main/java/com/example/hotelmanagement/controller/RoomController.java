@@ -15,19 +15,19 @@ public class RoomController extends AbstractController<Room> {
     }
 
     @Override
-    protected boolean add(Room room) {
+    public boolean add(Room room) {
         roomRepository.addRoom(room);
         return true;
     }
 
     @Override
-    protected boolean update(Room room) throws RoomNotFoundException {
+    public boolean update(Room room) throws RoomNotFoundException {
         roomRepository.updateRoom(room);
         return true;
     }
 
     @Override
-    protected boolean remove(int id) throws RoomNotFoundException {
+    public boolean remove(int id) throws RoomNotFoundException {
         Room room = roomRepository.findRoomByNumber(id);
         roomRepository.removeRoom(room);
         return true;
@@ -48,4 +48,8 @@ public class RoomController extends AbstractController<Room> {
         return Optional.of(room);
     }
 
+    // Método para obter apenas quartos disponíveis
+    public List<Room> getAvailableRooms() {
+        return roomRepository.getAvailableRooms();
+    }
 }

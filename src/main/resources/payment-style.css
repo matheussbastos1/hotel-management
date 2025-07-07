@@ -1,0 +1,93 @@
+.root, .vbox {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #e0eafc 0%, #cfdef3 100%);
+}
+
+.label {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-text-fill: #222;
+    -fx-effect: dropshadow(gaussian, #b0c4de, 2, 0.2, 0, 1);
+}
+
+#amountLabel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #1b5e20;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #a5d6a7, 4, 0.3, 0, 2);
+}
+
+#statusLabel {
+    -fx-font-size: 16px;
+    -fx-padding: 12 0 0 0;
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, #90caf9, 4, 0.2, 0, 2);
+}
+
+.button {
+    -fx-background-color: linear-gradient(from 0% 50% to 100% 50%, #1976d2 60%, #64b5f6 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 10 28 10 28;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #1976d2, 4, 0.2, 0, 2);
+    -fx-border-color: #1565c0;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(from 0% 50% to 100% 50%, #64b5f6 0%, #1976d2 100%);
+    -fx-effect: dropshadow(gaussian, #42a5f5, 8, 0.3, 0, 4);
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.text-field, .combo-box {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #90caf9;
+    -fx-background-color: #f8fafc;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, #b0bec5, 2, 0.1, 0, 1);
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #1976d2;
+    -fx-background-color: #e3f2fd;
+}
+
+.vbox {
+    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-padding: 22;
+    -fx-effect: dropshadow(gaussian, #b0bec5, 10, 0.2, 0, 4);
+}
+
+#paymentOptionsContainer > .vbox {
+    -fx-background-color: #f0f4f8;
+    -fx-border-color: #90caf9;
+    -fx-border-width: 2;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, #b3e5fc, 6, 0.15, 0, 2);
+}
+
+.text {
+    -fx-font-size: 14px;
+    -fx-fill: #37474f;
+}
+
+#bankSlipInfo {
+    -fx-font-weight: bold;
+    -fx-fill: #1976d2;
+    -fx-font-size: 15px;
+}
+
+.combo-box {
+    -fx-pref-width: 250;
+}

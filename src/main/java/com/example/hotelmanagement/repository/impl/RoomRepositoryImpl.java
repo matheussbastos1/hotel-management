@@ -11,11 +11,11 @@ import java.util.List;
 
 public class RoomRepositoryImpl implements RoomRepository {
 
-    private List<Room> rooms = new ArrayList<>();
+    private static List<Room> rooms = new ArrayList<>();
 
     @Override
     public void addRoom(Room room) {
-        this.rooms.add(room);
+        rooms.add(room);
     }
 
     @Override
@@ -48,9 +48,10 @@ public class RoomRepositoryImpl implements RoomRepository {
             throw new RoomNotFoundException("Quarto com o número " + room.getRoomNumber() + " não encontrado para atualização.");
     }
 
+
     @Override
     public List<Room> getAllRooms() {
-        return new ArrayList<>(this.rooms);
+        return new ArrayList<>(rooms);
     }
 
     @Override

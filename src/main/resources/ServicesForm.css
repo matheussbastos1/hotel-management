@@ -1,0 +1,45 @@
+.root, .vbox {
+    -fx-background-color: #f4f6fa;
+}
+
+.label {
+    -fx-text-fill: #2d3a4b;
+    -fx-font-size: 15px;
+}
+
+.label[styleClass~="title"] {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a237e;
+}
+
+.button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 20 8 20;
+}
+
+.button:hover {
+    -fx-background-color: #1565c0;
+}
+
+.tab-pane {
+    -fx-background-color: #e3eafc;
+    -fx-tab-min-width: 180px;
+    -fx-tab-max-width: 220px;
+}
+
+.table-view {
+    -fx-background-color: #fff;
+    -fx-table-cell-border-color: #e0e0e0;
+    -fx-font-size: 14px;
+}
+
+.combo-box, .spinner {
+    -fx-background-color: #fff;
+    -fx-border-color: #bdbdbd;
+    -fx-border-radius: 6;
+    -fx-padding: 4 8 4 8;
+}
