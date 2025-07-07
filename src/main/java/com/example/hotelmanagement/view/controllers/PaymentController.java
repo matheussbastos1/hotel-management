@@ -21,13 +21,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
-
 import java.util.Random;
 import java.util.UUID;
 
 public class PaymentController {
 
-    @FXML private Label amountLabel;
+    @FXML private TextField amountField;
     @FXML private ComboBox<String> paymentMethodComboBox;
     @FXML private Label statusLabel;
 
@@ -36,10 +35,7 @@ public class PaymentController {
     @FXML private VBox bankSlipPane;
     @FXML private VBox bankTransferPane;
 
-    @FXML private TextField cardHolderNameField;
-    @FXML private TextField cardNumberField;
-    @FXML private TextField expiryDateField;
-    @FXML private TextField cvvField;
+    @FXML private Label cardInstructionLabel;
 
     @FXML private TextField pixCodeField;
     @FXML private ImageView pixQrCodeImage;
@@ -63,8 +59,6 @@ public class PaymentController {
                 showRelevantPane(newVal);
             }
         });
-
-        amountLabel.setText("Valor devido: R$450,75");
 
         // Gera código Pix aleatório
         generatedPixCode = generateRandomPixCode();
@@ -97,6 +91,7 @@ public class PaymentController {
             case "Cartão de Débito":
                 cardPane.setVisible(true);
                 cardPane.setManaged(true);
+                cardInstructionLabel.setText("Peça ao cliente para aproximar ou inserir o cartão na maquininha.");
                 break;
             case "Pix":
                 pixPane.setVisible(true);
@@ -117,25 +112,23 @@ public class PaymentController {
     }
 
     @FXML
-    private void handlePayWithCard() {
-        if (cardNumberField.getText().isBlank() || cardHolderNameField.getText().isBlank()) {
-            showStatus("Erro: Preencha todos os dados do cartão.", Color.RED);
+    private void handleStartCardPayment() {
+        String valor = amountField.getText();
+        if (valor == null || valor.isBlank()) {
+            showStatus("Digite o valor do pagamento.", Color.RED);
             return;
         }
+        cardInstructionLabel.setText("Aguardando cliente aproximar ou inserir o cartão na maquininha...");
+        showStatus("Processando pagamento de R$" + valor + "...", Color.ORANGE);
 
-
-        showStatus("Processando Pagamento...", Color.ORANGE);
-
-        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        PauseTransition pause = new PauseTransition(Duration.seconds(10));
         pause.setOnFinished(event -> {
-            showStatus("Pagamento aprovado!", Color.GREEN);
-            cardHolderNameField.clear();
-            cardNumberField.clear();
-            expiryDateField.clear();
-            cvvField.clear();
+            cardInstructionLabel.setText("Compra aprovada!\nObrigado, Volte sempre!!");
+            showStatus("Pagamento de R$" + valor + " aprovado!", Color.GREEN);
         });
         pause.play();
     }
+
     @FXML
     private void handleVoltar(ActionEvent event) {
         try {
@@ -151,12 +144,17 @@ public class PaymentController {
 
     @FXML
     private void handleGenerateBankSlip() {
+        String valor = amountField.getText();
+        if (valor == null || valor.isBlank()) {
+            showStatus("Digite o valor do pagamento.", Color.RED);
+            return;
+        }
         Random rand = new Random();
         String barcode = String.format("12399.%05d 51234.%06d12 34567.%08d 4 %014d",
                 rand.nextInt(99999), rand.nextInt(999999), rand.nextInt(99999999),
                 System.currentTimeMillis() / 1000 + 1000000L);
 
-        bankSlipInfo.setText("Boleto gerado! Linha digitável: " + barcode);
+        bankSlipInfo.setText("Boleto gerado! Valor: R$" + valor + " | Linha digitável: " + barcode);
         System.out.println("Boleto gerado: " + barcode);
 
         showStatus("Aguardando pagamento do boleto (confirmação em até 2 dias úteis).", Color.ORANGE);
