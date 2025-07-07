@@ -13,6 +13,14 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+import java.util.Objects;
 
 import java.util.Random;
 import java.util.UUID;
@@ -115,6 +123,7 @@ public class PaymentController {
             return;
         }
 
+
         showStatus("Processando Pagamento...", Color.ORANGE);
 
         PauseTransition pause = new PauseTransition(Duration.seconds(5));
@@ -126,6 +135,18 @@ public class PaymentController {
             cvvField.clear();
         });
         pause.play();
+    }
+    @FXML
+    private void handleVoltar(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/DashboardForm.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Principal");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

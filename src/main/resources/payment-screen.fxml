@@ -5,80 +5,75 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.image.ImageView?>
 
-<VBox alignment="TOP_CENTER" spacing="15.0" prefWidth="700" prefHeight="600"
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.hotelmanagement.view.controllers.PaymentController"
-      stylesheets="@payment-style.css">
+<VBox alignment="TOP_CENTER" spacing="15.0" prefWidth="700" prefHeight="650" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.PaymentController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20" />
+        <Insets top="20" right="40" bottom="20" left="40" />
     </padding>
 
-    <Label text="Tela de Pagamento">
-        <font>
-            <Font name="System Bold" size="24.0" />
-        </font>
-    </Label>
+    <Label text="Tela de Pagamento" styleClass="dashboard-title" />
 
-    <Label fx:id="amountLabel" text="Valor devido: R$0,00">
-        <font>
-            <Font size="18.0" />
-        </font>
-    </Label>
+    <VBox alignment="TOP_CENTER" spacing="15.0" styleClass="metric-card" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20" />
+        </padding>
+        <children>
+            <Label fx:id="amountLabel" text="Valor devido: R$0,00" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-    <Label text="Selecione o método de pagamento:" />
-    <ComboBox fx:id="paymentMethodComboBox" prefWidth="250" promptText="Escolha uma opção..." />
+            <Label text="Selecione o método de pagamento:" />
+            <ComboBox fx:id="paymentMethodComboBox" prefWidth="300.0" promptText="Escolha uma opção..." />
 
-    <VBox fx:id="paymentOptionsContainer" spacing="10.0" alignment="CENTER">
+            <VBox fx:id="paymentOptionsContainer" spacing="10.0" alignment="CENTER" style="-fx-padding: 15 0 15 0;">
 
-        <VBox fx:id="cardPane" spacing="10.0" managed="false" visible="false">
-            <Label text="Dados do Cartão" style="-fx-font-weight: bold;" />
-            <TextField fx:id="cardHolderNameField" promptText="Nome do Titular" />
-            <TextField fx:id="cardNumberField" promptText="Número do Cartão" />
-            <HBox spacing="10">
-                <TextField fx:id="expiryDateField" promptText="Validade (MM/AA)" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="cvvField" promptText="CVV" HBox.hgrow="ALWAYS"/>
-            </HBox>
-            <Button text="Pagar com Cartão" onAction="#handlePayWithCard" prefWidth="150" />
-        </VBox>
+                <VBox fx:id="cardPane" spacing="10.0" managed="false" visible="false" maxWidth="400">
+                    <Label text="Dados do Cartão" style="-fx-font-weight: bold;" />
+                    <TextField fx:id="cardHolderNameField" promptText="Nome do Titular" />
+                    <TextField fx:id="cardNumberField" promptText="Número do Cartão" />
+                    <HBox spacing="10">
+                        <TextField fx:id="expiryDateField" promptText="Validade (MM/AA)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="cvvField" promptText="CVV" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <Button text="Pagar com Cartão" onAction="#handlePayWithCard" prefWidth="150" styleClass="save-button" />
+                </VBox>
 
-        <VBox fx:id="pixPane" spacing="10.0" managed="false" visible="false" alignment="CENTER">
-            <Label text="Pagar com Pix" style="-fx-font-weight: bold;" />
-            <Text text="Escaneie o QR Code ou use o código Copia &amp; Cola" textAlignment="CENTER" wrappingWidth="300" />
-            <VBox style="-fx-border-color: black; -fx-padding: 10;">
-                <ImageView fx:id="pixQrCodeImage" fitWidth="180" fitHeight="180" preserveRatio="true"/>
+                <VBox fx:id="pixPane" spacing="10.0" managed="false" visible="false" alignment="CENTER">
+                    <Label text="Pagar com Pix" style="-fx-font-weight: bold;" />
+                    <Text text="Escaneie o QR Code ou use o código Copia &amp; Cola" textAlignment="CENTER" wrappingWidth="300" />
+                    <VBox style="-fx-border-color: #E0E0E0; -fx-padding: 10; -fx-border-radius: 5;">
+                        <ImageView fx:id="pixQrCodeImage" fitWidth="180" fitHeight="180" preserveRatio="true"/>
+                    </VBox>
+                    <HBox spacing="8" alignment="CENTER">
+                        <TextField fx:id="pixCodeField" editable="false" prefWidth="350" />
+                        <Button text="Copiar" onAction="#handleCopyPixCode" styleClass="secondary-button" />
+                    </HBox>
+                </VBox>
+
+                <VBox fx:id="bankSlipPane" spacing="10.0" managed="false" visible="false" alignment="CENTER">
+                    <Label text="Pagamento por Boleto" style="-fx-font-weight: bold;" />
+                    <Button text="Gerar e Exibir Boleto" onAction="#handleGenerateBankSlip" prefWidth="250" styleClass="save-button" />
+                    <Text fx:id="bankSlipInfo" wrappingWidth="300" textAlignment="CENTER" />
+                </VBox>
+
+                <VBox fx:id="bankTransferPane" spacing="5.0" managed="false" visible="false" alignment="CENTER">
+                    <Label text="Dados para Transferência Bancária" style="-fx-font-weight: bold;" />
+                    <Text text="Banco: 123 - Banco Hotel Management" />
+                    <Text text="Agência: 0001" />
+                    <Text text="Conta: 12345-6" />
+                    <Text text="CNPJ: 12.345.678/0001-99" />
+                    <Text text="Beneficiário: Hotel Management Systems Inc." />
+                </VBox>
             </VBox>
-            <HBox spacing="8" alignment="CENTER">
-                <TextField fx:id="pixCodeField" editable="false" text="00020126... (código copia &amp; cola) ...5303986" />
-                <Button text="Copiar" onAction="#handleCopyPixCode" />
-            </HBox>
-        </VBox>
 
-        <VBox fx:id="bankSlipPane" spacing="10.0" managed="false" visible="false" alignment="CENTER">
-            <Label text="Pagamento por Boleto" style="-fx-font-weight: bold;" />
-            <Button text="Gerar e Exibir Boleto" onAction="#handleGenerateBankSlip" prefWidth="250" />
-            <Text fx:id="bankSlipInfo" wrappingWidth="300" textAlignment="CENTER" />
-        </VBox>
-
-        <VBox fx:id="bankTransferPane" spacing="5.0" managed="false" visible="false" alignment="CENTER">
-            <Label text="Dados para Transferência Bancária" style="-fx-font-weight: bold;" />
-            <Text text="Banco: 123 - Banco Hotel Management" />
-            <Text text="Agência: 0001" />
-            <Text text="Conta: 12345-6" />
-            <Text text="CNPJ: 12.345.678/0001-99" />
-            <Text text="Beneficiário: Hotel Management Systems Inc." />
-        </VBox>
-
+            <Label fx:id="statusLabel" style="-fx-font-weight: bold;" textAlignment="CENTER" />
+        </children>
     </VBox>
 
-    <Label fx:id="statusLabel" style="-fx-font-weight: bold; -fx-text-fill: green;" textAlignment="CENTER">
-        <VBox.margin>
-            <Insets top="20.0" />
-        </VBox.margin>
-    </Label>
+    <HBox alignment="CENTER" >
+        <Button text="Voltar ao Dashboard" onAction="#handleVoltar" styleClass="secondary-button" />
+    </HBox>
 </VBox>

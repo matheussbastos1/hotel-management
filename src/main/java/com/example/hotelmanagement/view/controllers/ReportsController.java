@@ -1,107 +1,57 @@
 package com.example.hotelmanagement.view.controllers;
 
-
-import com.example.hotelmanagement.dto.ReservationDetailsDTO; // Importe seu DTO
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Objects;
 
 public class ReportsController {
 
-    @FXML
-    private TableView<ReservationDetailsDTO> reportsTableView;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, Long> reservationIdColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, String> guestNameColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, LocalDate> checkInDateColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, LocalDate> checkOutDateColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, ?> reservationStatusColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, Integer> roomNumberColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, ?> roomTypeColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, Double> roomPriceColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, BigDecimal> totalAmountColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, Boolean> isPaidColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, String> paymentMethodColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, String> guestEmailColumn;
-    @FXML
-    private TableColumn<ReservationDetailsDTO, String> guestPhoneColumn;
+    /**
+     * Chamado pelo botão "Relatório de Estadias".
+     * Abre a tela específica de estadias.
+     */
 
     @FXML
-    public void initialize() {
-        // "Linka" cada coluna a um atributo da classe ReservationDetailsDTO.
-        // O nome em " " deve ser EXATAMENTE igual ao nome do atributo no DTO.
-        reservationIdColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
-        guestNameColumn.setCellValueFactory(new PropertyValueFactory<>("guestName"));
-        checkInDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkInDate"));
-        checkOutDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkOutDate"));
-        reservationStatusColumn.setCellValueFactory(new PropertyValueFactory<>("reservationStatus"));
-        roomNumberColumn.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
-        roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
-        roomPriceColumn.setCellValueFactory(new PropertyValueFactory<>("roomPrice"));
-        totalAmountColumn.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        isPaidColumn.setCellValueFactory(new PropertyValueFactory<>("isPaid"));
-        paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
-        guestEmailColumn.setCellValueFactory(new PropertyValueFactory<>("guestEmail"));
-        guestPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("guestPhone"));
-
-        // Carrega os dados na tabela
-        loadReportData();
+    private void handleOpenEstadiaReport(ActionEvent event) {
+        // Supondo que o nome do seu arquivo seja StayReport.fxml
+        loadReportScreen("/StayView.fxml", "Relatório de Estadias", event);
     }
     @FXML
-    private void handleVoltar(javafx.event.ActionEvent event) {
+    private void handleOpenFinancialReport(ActionEvent event) {
+        // Certifique-se de que o nome do arquivo FXML está correto
+        loadReportScreen("/FinancialReportView.fxml", "Relatório Financeiro", event);
+    }
+
+    // Você pode adicionar outros métodos para os outros botões aqui no futuro...
+
+    /**
+     * Chamado pelo botão "Voltar ao Dashboard".
+     */
+    @FXML
+    private void handleVoltar(ActionEvent event) {
+        loadReportScreen("/DashboardForm.fxml", "Dashboard Principal", event);
+    }
+
+    /**
+     * Método auxiliar para carregar as diferentes telas de relatório.
+     */
+    private void loadReportScreen(String fxmlFile, String title, ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlFile)));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Dashboard Principal");
+            stage.setTitle(title);
             stage.show();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
+            System.err.println("ERRO AO CARREGAR TELA DE RELATÓRIO: " + fxmlFile);
             e.printStackTrace();
         }
-    }
-
-    private void loadReportData() {
-        ObservableList<ReservationDetailsDTO> reportData = FXCollections.observableArrayList();
-        com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl reservationRepository = new com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl();
-
-        for (com.example.hotelmanagement.models.Reservation reservation : reservationRepository.getAllReservations()) {
-            ReservationDetailsDTO dto = new ReservationDetailsDTO();
-            dto.setReservationId(reservation.getReservationId());
-            dto.setGuestName(reservation.getPrincipalGuest() != null ? reservation.getPrincipalGuest().getName() : "");
-            dto.setCheckInDate(reservation.getCheckInDate());
-            dto.setCheckOutDate(reservation.getCheckOutDate());
-            dto.setRoomNumber(reservation.getRoom() != null ? reservation.getRoom().getRoomNumber() : null);
-            dto.setRoomType(reservation.getRoom() != null ? reservation.getRoom().getRoomType() : null);
-            dto.setRoomPrice(reservation.getRoom() != null ? reservation.getRoom().getPrice() : null);
-            dto.setGuestEmail(reservation.getPrincipalGuest() != null ? reservation.getPrincipalGuest().getEmail() : "");
-            dto.setGuestPhone(reservation.getPrincipalGuest() != null ? reservation.getPrincipalGuest().getPhone() : "");
-            // Preencha outros campos conforme necessário
-            reportData.add(dto);
-        }
-
-        reportsTableView.setItems(reportData);
     }
 }

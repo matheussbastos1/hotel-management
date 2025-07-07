@@ -17,11 +17,20 @@ import com.example.hotelmanagement.service.impl.InvoiceServiceImpl;
 import com.example.hotelmanagement.service.impl.ReservationServiceImpl;
 import com.example.hotelmanagement.service.serviceExceptions.InvalidOperationException;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+import java.util.Objects;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 public class StayController {
@@ -234,6 +243,19 @@ public class StayController {
             messageLabel.setText("Erro ao realizar check-out: " + e.getMessage());
         } catch (Exception e) {
             messageLabel.setText("Ocorreu um erro inesperado durante o check-out: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void handleVoltar(ActionEvent event) {
+        try {
+            // Este caminho volta para o Dashboard Principal
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/DashboardForm.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard Principal");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

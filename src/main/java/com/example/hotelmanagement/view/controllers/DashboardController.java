@@ -82,6 +82,7 @@ public class DashboardController {
     @FXML private void handleAbrirCadastroQuarto(ActionEvent event) { loadScreen("/RoomForm.fxml", "Gestão de Quartos", event); }
     @FXML private void handleAbrirGestaoServicos(ActionEvent event) { loadScreen("/ServicesForm.fxml", "Gestão de Serviços", event); }
     @FXML private void handleAbrirRelatorios(ActionEvent event) { loadScreen("/ReportsForm.fxml", "Relatórios", event); }
+    @FXML private void handleAbrirPagamentos(ActionEvent event) { loadScreen("/payment-screen.fxml", "Pagamentos", event); }
 
     private void loadScreen(String fxmlFile, String title, ActionEvent event) {
         try {

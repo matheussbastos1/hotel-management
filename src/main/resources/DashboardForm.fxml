@@ -19,6 +19,7 @@
                 <Button onAction="#handleAbrirCadastroGeral" text="Cadastro Geral" styleClass="nav-button" prefWidth="180.0"/>
                 <Button onAction="#handleAbrirCadastroQuarto" text="Gerenciar Quartos" styleClass="nav-button" prefWidth="180.0"/>
                 <Button onAction="#handleAbrirGestaoServicos" text="Gerenciar Serviços" styleClass="nav-button" prefWidth="180.0"/>
+                <Button onAction="#handleAbrirPagamentos" text="Pagamentos" styleClass="nav-button" prefWidth="180.0"/>
                 <Button onAction="#handleAbrirRelatorios" text="Relatórios" styleClass="nav-button" prefWidth="180.0"/>
             </children>
         </VBox>

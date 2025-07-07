@@ -28,7 +28,30 @@
 .secondary-button { -fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 25px; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-cursor: hand; }
 .secondary-button:hover { -fx-background-color: #5a6268; }
 
+/* --- ADICIONE ESTE NOVO ESTILO AO FINAL DO SEU CSS --- */
 
+.report-button {
+    -fx-background-color: white;
+    -fx-pref-height: 120px;
+    -fx-pref-width: 250px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3447;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-alignment: top-left;
+    -fx-padding: 15px;
+}
+
+.report-button:hover {
+    -fx-border-color: #3a7bd5;
+    -fx-background-color: #fdfdff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 4);
+}
 /* --- NOVOS ESTILOS PARA ABAS (TabPane) --- */
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #f0f2f5; /* Fundo da barra de abas */
