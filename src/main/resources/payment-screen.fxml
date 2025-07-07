@@ -23,22 +23,21 @@
             <Insets top="20" right="20" bottom="20" left="20" />
         </padding>
         <children>
-            <Label fx:id="amountLabel" text="Valor devido: R$0,00" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Valor a pagar: R$" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <TextField fx:id="amountField" promptText="Digite o valor" prefWidth="120" style="-fx-font-size: 18px;"/>
+            </HBox>
 
             <Label text="Selecione o método de pagamento:" />
             <ComboBox fx:id="paymentMethodComboBox" prefWidth="300.0" promptText="Escolha uma opção..." />
 
             <VBox fx:id="paymentOptionsContainer" spacing="10.0" alignment="CENTER" style="-fx-padding: 15 0 15 0;">
 
-                <VBox fx:id="cardPane" spacing="10.0" managed="false" visible="false" maxWidth="400">
-                    <Label text="Dados do Cartão" style="-fx-font-weight: bold;" />
-                    <TextField fx:id="cardHolderNameField" promptText="Nome do Titular" />
-                    <TextField fx:id="cardNumberField" promptText="Número do Cartão" />
-                    <HBox spacing="10">
-                        <TextField fx:id="expiryDateField" promptText="Validade (MM/AA)" HBox.hgrow="ALWAYS"/>
-                        <TextField fx:id="cvvField" promptText="CVV" HBox.hgrow="ALWAYS"/>
-                    </HBox>
-                    <Button text="Pagar com Cartão" onAction="#handlePayWithCard" prefWidth="150" styleClass="save-button" />
+                <!-- NOVO BLOCO PARA PAGAMENTO COM CARTÃO -->
+                <VBox fx:id="cardPane" spacing="18.0" managed="false" visible="false" maxWidth="400" alignment="CENTER">
+                    <Label text="Pagamento com Cartão" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+                    <Label fx:id="cardInstructionLabel" text="Peça ao cliente para aproximar ou inserir o cartão na maquininha." wrapText="true" textAlignment="CENTER" style="-fx-font-size: 15px;" />
+                    <Button text="Iniciar Pagamento" onAction="#handleStartCardPayment" prefWidth="180" styleClass="save-button" />
                 </VBox>
 
                 <VBox fx:id="pixPane" spacing="10.0" managed="false" visible="false" alignment="CENTER">
