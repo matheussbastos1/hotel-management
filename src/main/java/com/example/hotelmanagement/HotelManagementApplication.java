@@ -5,12 +5,14 @@ import javafx.stage.Stage;
 
 public class HotelManagementApplication extends Application {
     @Override
-    public void start(Stage stage) {
-        stage.setTitle("Sistema de Gerenciamento de Hotel");
-        stage.show();
-    }
+    public void start(Stage stage) throws Exception {
 
-    public static void main(String[] args) {
-        launch(args);
+        stage.setTitle("Hotel Management System");
+        stage.setWidth(800);
+        stage.setHeight(600);
+        stage.setResizable(false);
+
+        stage.show();
+
     }
 }
