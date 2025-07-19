@@ -33,7 +33,7 @@ public class RoomFormController {
     private RoomController roomController; // Injeção de dependência do controlador
     private Room roomToEdit; // Para preencher o formulário se estiver editando
 
-    // Método para injetar o RoomController
+
     public void setRoomController(RoomController roomController) {
         this.roomController = roomController;
     }
@@ -69,7 +69,7 @@ public class RoomFormController {
         ));
     }
 
-    @FXML
+   @FXML
     private void handleSave(ActionEvent event) {
         if (validateFields()) {
             try {
@@ -83,11 +83,9 @@ public class RoomFormController {
                 Room room = new Room(roomNumber, roomType, price, status, maxOccupancy, bedType);
 
                 if (roomToEdit == null) {
-                    // Modo de Adição
                     roomController.add(room);
                     showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Quarto adicionado com sucesso!");
                 } else {
-                    // Modo de Edição
                     roomController.update(room);
                     showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Quarto atualizado com sucesso!");
                 }

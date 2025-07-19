@@ -2,16 +2,38 @@ package com.example.hotelmanagement.repository.impl;
 
 import com.example.hotelmanagement.models.Guest;
 import com.example.hotelmanagement.models.Reservation;
+import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.ReservationNotFoundException;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ReservationRepositoryImpl implements ReservationRepository {
 
     private final List<Reservation> reservations = new ArrayList<>();
+
+   // ReservationRepositoryImpl.java
+   @Override
+   public Optional<Reservation> findActiveByRoomNumber(int roomNumber) {
+       for (Reservation reservation : reservations) {
+           if (reservation.getRoom().getRoomNumber() == roomNumber
+               && reservation.getStatus() == ReservationStatus.CHECKED_IN) {
+               return Optional.of(reservation);
+           }
+       }
+       return Optional.empty();
+   }
+   @Override
+   public List<Reservation> findByStatus(ReservationStatus status) {
+       return reservations.stream()
+           .filter(reservation -> reservation.getStatus() == status)
+           .collect(Collectors.toList());
+   }
+
 
     @Override
     public void addReservation(Reservation reservation) {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" prefWidth="600" prefHeight="650" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.CheckOutController">
+    <padding>
+        <Insets top="20" right="40" bottom="20" left="40" />
+    </padding>
+
+    <Label text="Tela de Check-out" styleClass="dashboard-title" />
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="Selecione o Quarto para Check-out:" style="-fx-font-size: 16px;" />
+        <ComboBox fx:id="occupiedRoomsComboBox" prefWidth="250.0" promptText="Escolha um quarto ocupado..." />
+    </HBox>
+
+    <VBox fx:id="checkoutDetailsPane" spacing="15.0" styleClass="metric-card" visible="false" managed="false">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20" />
+        </padding>
+        <children>
+            <Label fx:id="guestInfoLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <VBox spacing="5.0">
+                <Label text="Resumo da Estadia:" style="-fx-font-weight: bold;" />
+                <Label fx:id="stayDetailsLabel" />
+                <Label fx:id="staySubtotalLabel" style="-fx-font-weight: bold;" />
+            </VBox>
+
+            <VBox spacing="5.0">
+                <Label text="Serviços Adicionais:" style="-fx-font-weight: bold;" />
+                <ListView fx:id="servicesListView" prefHeight="100.0" />
+                <Label fx:id="servicesSubtotalLabel" style="-fx-font-weight: bold;" />
+            </VBox>
+
+            <Label fx:id="totalAmountLabel" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #28a745;" />
+
+        </children>
+    </VBox>
+
+    <HBox alignment="CENTER" spacing="15.0">
+        <Button fx:id="finalizeButton" text="Finalizar Check-out" onAction="#handleFinalizarCheckOut" styleClass="save-button" disable="true" />
+        <Button text="Voltar ao Dashboard" onAction="#handleVoltar" styleClass="secondary-button" />
+    </HBox>
+</VBox>

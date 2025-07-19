@@ -71,7 +71,27 @@
 .tab-pane .tab:selected .tab-label {
     -fx-text-fill: white;
 }
+.card-reserva {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0.1, 0, 2);
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+}
+.card-status-confirmed {
+    -fx-background-color: #28a745; /* Verde */
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 15px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
 
+.card-reserva:hover {
+    -fx-border-color: #2D3447; /* Azul escuro do menu */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0.2, 0, 3);
+}
 .tab-pane .tab .tab-label {
     -fx-font-size: 14px;
     -fx-text-fill: #333333;

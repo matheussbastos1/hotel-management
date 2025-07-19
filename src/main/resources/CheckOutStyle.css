@@ -1,0 +1,57 @@
+/* --- ESTILOS PARA A TELA DE CHECK-OUT --- */
+
+/* ESTILO DO CARD PRINCIPAL */
+/* Aplica o efeito de "cartão branco flutuante" no painel de detalhes. */
+.metric-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px; /* Cantos arredondados */
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 15, 0.2, 0, 3); /* Sombra */
+}
+
+/* ESTILO PARA LISTAS E CAIXAS DE SELEÇÃO */
+/* Deixa a ComboBox e a ListView com um visual mais limpo e moderno. */
+.combo-box, .list-view {
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 5px;
+    -fx-background-color: #FAFAFA;
+}
+
+/* Efeito de foco para quando o usuário clica nos componentes. */
+.combo-box:focused, .list-view:focused {
+    -fx-border-color: #2D3447; /* Azul escuro do menu */
+    -fx-border-width: 2px;
+}
+
+/* Remove a borda de foco interna padrão para um visual mais limpo. */
+.combo-box .list-cell, .list-view .list-cell {
+    -fx-border-color: transparent;
+}
+
+/* ESTILO DOS BOTÕES */
+/* Botão primário (verde) - você provavelmente já tem essa classe. */
+.save-button {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+.save-button:hover {
+    -fx-background-color: #218838;
+}
+
+/* Botão secundário (cinza) para ações como "Voltar". */
+.secondary-button {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+.secondary-button:hover {
+    -fx-background-color: #5a6268;
+}

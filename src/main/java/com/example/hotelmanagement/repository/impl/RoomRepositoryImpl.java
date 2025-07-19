@@ -6,8 +6,10 @@ import com.example.hotelmanagement.models.RoomType;
 import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomRepositoryImpl implements RoomRepository {
 
@@ -48,6 +50,14 @@ public class RoomRepositoryImpl implements RoomRepository {
             throw new RoomNotFoundException("Quarto com o número " + room.getRoomNumber() + " não encontrado para atualização.");
     }
 
+    @Override
+    public List<Room> findAvailableRoomsByDateRange(LocalDate checkIn, LocalDate checkOut) {
+        // Exemplo simples: retorna todos os quartos disponíveis
+        return rooms.stream()
+            .filter(room -> room.getStatus() == RoomStatus.AVAILABLE)
+            .collect(Collectors.toList());
+        // Implemente a lógica real conforme sua estrutura de reservas
+    }
 
     @Override
     public List<Room> getAllRooms() {
