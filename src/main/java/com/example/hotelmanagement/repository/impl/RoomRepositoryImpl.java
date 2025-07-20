@@ -1,8 +1,10 @@
 package com.example.hotelmanagement.repository.impl;
 
+import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.models.Room;
 import com.example.hotelmanagement.models.RoomStatus;
 import com.example.hotelmanagement.models.RoomType;
+import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 import com.example.hotelmanagement.util.DataPersistence;
@@ -16,8 +18,10 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     private static final String FILE_NAME = "rooms";
     private List<Room> rooms;
+    private ReservationRepository reservationRepository;
 
     public RoomRepositoryImpl() {
+        this.reservationRepository = new ReservationRepositoryImpl();
         loadData();
     }
 
@@ -91,5 +95,40 @@ public class RoomRepositoryImpl implements RoomRepository {
             throw new RoomNotFoundException("Quarto com número " + roomNumber + " não encontrado");
         }
         saveData();
+    }
+
+    @Override
+    public List<Room> findAvailableRoomsByDateRange(LocalDate checkIn, LocalDate checkOut) {
+        List<Room> availableRooms = new ArrayList<>();
+
+        for (Room room : rooms) {
+            if (room.getStatus() == RoomStatus.AVAILABLE) {
+                // Verifica se o quarto não tem reservas conflitantes no período
+                boolean isAvailable = reservationRepository.getAllReservations().stream()
+                        .noneMatch(reservation ->
+                                reservation.getRoom().getRoomNumber() == room.getRoomNumber() &&
+                                        reservation.getStatus() != ReservationStatus.CANCELLED &&
+                                        datesOverlap(checkIn, checkOut, reservation.getCheckInDate(), reservation.getCheckOutDate())
+                        );
+
+                if (isAvailable) {
+                    availableRooms.add(room);
+                }
+            }
+        }
+
+        return availableRooms;
+    }
+
+    private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+        return start1.isBefore(end2) && start2.isBefore(end1);
+    }
+
+    @Override
+    public Room findRoomByNumber(int roomNumber) throws RoomNotFoundException {
+        return rooms.stream()
+                .filter(room -> room.getRoomNumber() == roomNumber)
+                .findFirst()
+                .orElseThrow(() -> new RoomNotFoundException("Quarto com número " + roomNumber + " não encontrado"));
     }
 }
