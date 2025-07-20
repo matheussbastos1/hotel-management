@@ -5,6 +5,7 @@ import com.example.hotelmanagement.models.RoomStatus;
 import com.example.hotelmanagement.models.RoomType;
 import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
+import com.example.hotelmanagement.util.DataPersistence;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,51 +14,31 @@ import java.util.stream.Collectors;
 
 public class RoomRepositoryImpl implements RoomRepository {
 
-    private static List<Room> rooms = new ArrayList<>();
+    private static final String FILE_NAME = "rooms";
+    private List<Room> rooms;
+
+    public RoomRepositoryImpl() {
+        loadData();
+    }
+
+    private void loadData() {
+        rooms = DataPersistence.loadFromFile(FILE_NAME);
+        if (rooms == null) {
+            rooms = new ArrayList<>();
+        }
+    }
+
+    private void saveData() {
+        DataPersistence.saveToFile(rooms, FILE_NAME);
+    }
 
     @Override
     public void addRoom(Room room) {
         rooms.add(room);
+        saveData();
     }
 
-    @Override
-    public void removeRoom(Room room) throws RoomNotFoundException {
-        if (!rooms.remove(room)) {
-            throw new RoomNotFoundException("Quarto com o número " + room.getRoomNumber() + " não encontrado para remoção.");
-        }
-    }
-
-    @Override
-    public Room findRoomByNumber(int roomNumber) throws RoomNotFoundException {
-        for (Room room : rooms) {
-            if (room.getRoomNumber() == roomNumber) {
-                return room;
-            }
-        }
-
-        throw new RoomNotFoundException("Quarto com o número " + roomNumber + " não encontrado.");
-    }
-
-
-    @Override
-    public void updateRoom(Room room) throws RoomNotFoundException {
-            for (int i = 0; i < rooms.size(); i++) {
-                if (rooms.get(i).getRoomNumber() == room.getRoomNumber()) {
-                    rooms.set(i, room);
-                    return;
-                }
-            }
-            throw new RoomNotFoundException("Quarto com o número " + room.getRoomNumber() + " não encontrado para atualização.");
-    }
-
-    @Override
-    public List<Room> findAvailableRoomsByDateRange(LocalDate checkIn, LocalDate checkOut) {
-        // Exemplo simples: retorna todos os quartos disponíveis
-        return rooms.stream()
-            .filter(room -> room.getStatus() == RoomStatus.AVAILABLE)
-            .collect(Collectors.toList());
-        // Implemente a lógica real conforme sua estrutura de reservas
-    }
+   
 
     @Override
     public List<Room> getAllRooms() {
@@ -66,34 +47,49 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public List<Room> getAvailableRooms() {
-        List<Room> availableRooms = new ArrayList<>();
-        for (Room room : rooms) {
-            if (room.getStatus() == RoomStatus.AVAILABLE) {
-                availableRooms.add(room);
-            }
-        }
-        return availableRooms;
+        return rooms.stream()
+                .filter(room -> room.getStatus() == RoomStatus.AVAILABLE)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Room> getRoomsByType(RoomType roomType) {
-        List<Room> roomsByType = new ArrayList<>();
-        for (Room room : rooms) {
-            if (room.getRoomType() == roomType) {
-                roomsByType.add(room);
-            }
-        }
-        return roomsByType;
+        return rooms.stream()
+                .filter(room -> room.getRoomType() == roomType)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Room> getRoomsByStatus(RoomStatus roomStatus) {
-        List<Room> roomsByStatus = new ArrayList<>();
-        for (Room room : rooms) {
-            if (room.getStatus() == roomStatus) {
-                roomsByStatus.add(room);
+        return rooms.stream()
+                .filter(room -> room.getStatus() == roomStatus)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateRoom(Room room) throws RoomNotFoundException {
+        int index = -1;
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).getRoomNumber() == room.getRoomNumber()) {
+                index = i;
+                break;
             }
         }
-        return roomsByStatus;
+
+        if (index == -1) {
+            throw new RoomNotFoundException("Quarto com número " + room.getRoomNumber() + " não encontrado");
+        }
+
+        rooms.set(index, room);
+        saveData();
+    }
+
+    @Override
+    public void removeRoom(int roomNumber) throws RoomNotFoundException {
+        boolean removed = rooms.removeIf(room -> room.getRoomNumber() == roomNumber);
+        if (!removed) {
+            throw new RoomNotFoundException("Quarto com número " + roomNumber + " não encontrado");
+        }
+        saveData();
     }
 }

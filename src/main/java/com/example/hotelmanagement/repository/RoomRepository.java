@@ -13,7 +13,7 @@ public interface RoomRepository {
 
     void addRoom(Room room);
 
-    void removeRoom(Room room) throws RoomNotFoundException;
+    void removeRoom(int roomNumber) throws RoomNotFoundException;
 
     // Adicione à interface
     List<Room> findAvailableRoomsByDateRange(LocalDate checkIn, LocalDate checkOut);

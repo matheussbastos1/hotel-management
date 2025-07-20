@@ -31,7 +31,7 @@ public class ReservationController extends AbstractController<Reservation> {
     @Override
     public boolean remove(int id) throws ReservationNotFoundException {
         Reservation reservation = reservationRepository.findReservationById(id);
-        reservationRepository.removeReservation(reservation);
+        reservationRepository.removeReservation(id);
         return true;
     }
 

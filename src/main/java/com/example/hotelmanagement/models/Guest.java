@@ -4,12 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 //Essa classe representa um hóspede em um sistema de reservas de hotel.
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Guest {
+public class Guest implements Serializable {
+    @Serial
+    private static  final long serialVersionUID = 1L;
     private Long id;
     private String Name;
     private String Email;
