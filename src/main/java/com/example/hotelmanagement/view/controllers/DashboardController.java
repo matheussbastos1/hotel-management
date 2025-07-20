@@ -1,5 +1,7 @@
 package com.example.hotelmanagement.view.controllers;
 
+import com.example.hotelmanagement.controller.RoomController;
+import com.example.hotelmanagement.repository.impl.RoomRepositoryImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -48,6 +50,7 @@ public class DashboardController {
         clock.play();
     }
 
+
     private void loadDashboardData() {
         // --- DADOS SIMULADOS (VOCÊ PODE MUDAR ESSES NÚMEROS) ---
         int occupiedRooms = 45;
@@ -79,10 +82,80 @@ public class DashboardController {
 
     // --- Métodos de Navegação (mantidos como antes) ---
     @FXML private void handleAbrirCadastroGeral(ActionEvent event) { loadScreen("/GeneralReserve.fxml", "Cadastro Geral", event); }
-    @FXML private void handleAbrirCadastroQuarto(ActionEvent event) { loadScreen("/RoomForm.fxml", "Gestão de Quartos", event); }
-    @FXML private void handleAbrirGestaoServicos(ActionEvent event) { loadScreen("/ServicesForm.fxml", "Gestão de Serviços", event); }
+    // Este método deve estar no seu DashboardController.java
+    @FXML
+    private void handleAbrirFormularioQuarto(ActionEvent event) {
+        try {
+            // 1. Carrega o FXML do formulário
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RoomForm.fxml")); // Verifique se o caminho está certo
+            Parent root = loader.load();
+
+            // 2. Pega a instância do controller do formulário ANTES de mostrar a tela
+            RoomFormController formController = loader.getController();
+
+            // 3. CRIA o RoomController que estava faltando
+
+
+           // Adicione antes de setRoomController
+         RoomController roomController = new RoomController(new RoomRepositoryImpl());
+           formController.setRoomController(roomController);
+
+            // 5. Agora sim, mostra a tela, já com tudo conectado
+            Stage stage = new Stage();
+            stage.setTitle("Adicionar Novo Quarto");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }    @FXML private void handleAbrirGestaoServicos(ActionEvent event) { loadScreen("/ServicesForm.fxml", "Gestão de Serviços", event); }
     @FXML private void handleAbrirRelatorios(ActionEvent event) { loadScreen("/ReportsForm.fxml", "Relatórios", event); }
     @FXML private void handleAbrirPagamentos(ActionEvent event) { loadScreen("/payment-screen.fxml", "Pagamentos", event); }
+    // Dentro da classe DashboardController.java
+
+    @FXML
+    private void handleAbrirCheckOut(ActionEvent event) {
+        try {
+            // Carrega o arquivo FXML da tela de check-out
+            Parent checkOutRoot = FXMLLoader.load(getClass().getResource("/CheckOut.fxml"));
+
+            // Pega a janela atual (o Stage) a partir do evento do clique
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Cria uma nova cena com o conteúdo da tela de check-out
+            Scene scene = new Scene(checkOutRoot);
+
+            // Define a nova cena na janela
+            stage.setScene(scene);
+
+            // Atualiza o título da janela
+            stage.setTitle("Tela de Check-out");
+
+            // Mostra a janela atualizada
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Erro ao carregar a tela de check-out:");
+            e.printStackTrace();
+            // Opcional: mostrar um alerta de erro para o usuário
+        }
+    }
+    @FXML
+    private void handleAbrirCheckIn(ActionEvent event) { // ou o nome que você usa
+        try {
+            // Carrega a nova tela de painel de check-in
+            Parent checkInRoot = FXMLLoader.load(getClass().getResource("/CheckInView.fxml"));
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(checkInRoot));
+            stage.setTitle("Painel de Check-in");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void loadScreen(String fxmlFile, String title, ActionEvent event) {
         try {

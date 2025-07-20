@@ -2,6 +2,7 @@ package com.example.hotelmanagement.view.controllers;
 
 import com.example.hotelmanagement.models.Guest;
 import com.example.hotelmanagement.models.Reservation;
+import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.models.Room;
 import com.example.hotelmanagement.repository.GuestRepository;
 import com.example.hotelmanagement.repository.ReservationRepository;
@@ -18,22 +19,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import java.time.LocalDate;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ReservaController {
+public class GeneralReserveController {
 
     // --- Repositórios para Acesso aos Dados ---
     private final GuestRepository guestRepository = new GuestRepositoryImpl();
     private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
     private final RoomRepository roomRepository = new RoomRepositoryImpl();
 
+
     // --- Componentes da Tela (Ligados ao FXML) ---
     @FXML private TextField nameField;
-    @FXML private TextField cpfld; // Adicionado para corresponder ao seu FXML
+    @FXML private TextField cpfld;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private TextField addressField;
@@ -48,15 +51,34 @@ public class ReservaController {
 
     @FXML
     public void initialize() {
-        // Configura o Spinner
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
         hospedesSpinner.setValueFactory(valueFactory);
-
-        // Adiciona o "ouvinte" que reage a mudanças no Spinner
         hospedesSpinner.valueProperty().addListener((obs, oldValue, newValue) -> updateCompanionForms(newValue));
+        findAndLoadAvailableRooms();
+        roomComboBox.setDisable(true);
+        roomComboBox.setPromptText("Primeiro, selecione as datas");
 
-        // Carrega a lista de quartos disponíveis
-        loadAvailableRooms();
+        // Adiciona "ouvintes" aos DatePickers. A busca de quartos só é feita quando as duas datas são válidas.
+        checkInDatePicker.valueProperty().addListener((obs, oldV, newV) -> findAndLoadAvailableRooms());
+        checkOutDatePicker.valueProperty().addListener((obs, oldV, newV) -> findAndLoadAvailableRooms());
+    }
+
+    private void findAndLoadAvailableRooms() {
+        LocalDate checkInDate = checkInDatePicker.getValue();
+        LocalDate checkOutDate = checkOutDatePicker.getValue();
+
+        // Só executa se ambas as datas foram selecionadas e a data de check-out é depois da de check-in
+        if (checkInDate != null && checkOutDate != null && checkOutDate.isAfter(checkInDate)) {
+            // Esta é a nova chamada que você precisará criar no seu repositório
+            List<Room> availableRooms = roomRepository.findAvailableRoomsByDateRange(checkInDate, checkOutDate);
+
+            roomComboBox.setItems(FXCollections.observableArrayList(availableRooms));
+            roomComboBox.setDisable(false); // Habilita o ComboBox
+            roomComboBox.setPromptText("Selecione um quarto");
+        } else {
+            roomComboBox.setDisable(true); // Mantém desabilitado se as datas forem inválidas
+            roomComboBox.getItems().clear();
+        }
     }
 
     /**
@@ -115,7 +137,7 @@ public class ReservaController {
             reservation.setRoom(roomComboBox.getValue());
             reservation.setCheckInDate(checkInDatePicker.getValue());
             reservation.setCheckOutDate(checkOutDatePicker.getValue());
-
+            reservation.setStatus(ReservationStatus.BEGGAR);
             reservationRepository.addReservation(reservation);
 
             showAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Reserva criada com sucesso.");

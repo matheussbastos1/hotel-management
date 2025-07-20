@@ -142,6 +142,7 @@ public class PaymentController {
         }
     }
 
+
     @FXML
     private void handleGenerateBankSlip() {
         String valor = amountField.getText();

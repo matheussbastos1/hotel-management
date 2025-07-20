@@ -7,6 +7,7 @@ import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 import com.example.hotelmanagement.util.DataPersistence;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,13 +38,7 @@ public class RoomRepositoryImpl implements RoomRepository {
         saveData();
     }
 
-    @Override
-    public Room findRoomByNumber(int roomNumber) throws RoomNotFoundException {
-        return rooms.stream()
-                .filter(room -> room.getRoomNumber() == roomNumber)
-                .findFirst()
-                .orElseThrow(() -> new RoomNotFoundException("Quarto com número " + roomNumber + " não encontrado"));
-    }
+   
 
     @Override
     public List<Room> getAllRooms() {

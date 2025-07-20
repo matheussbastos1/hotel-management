@@ -4,7 +4,8 @@ public enum ReservationStatus {
     BOOKED("Booked"),
     CHECKED_IN("Checked In"),
     CHECKED_OUT("Checked Out"),
-    CANCELLED("Cancelled");
+    CANCELLED("Cancelled"),
+    BEGGAR("beggar");
 
     private final String status;
 
