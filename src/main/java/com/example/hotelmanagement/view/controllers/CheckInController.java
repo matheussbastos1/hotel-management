@@ -21,7 +21,7 @@ public class CheckInController {
     @FXML private TextField searchField;
     @FXML private VBox cardsContainer;
 
-    private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+    private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     private List<Node> allReservationCards = new ArrayList<>(); // Guarda todos os cards para o filtro
 
     @FXML

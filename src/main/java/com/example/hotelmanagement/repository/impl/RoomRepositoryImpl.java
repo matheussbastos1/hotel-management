@@ -21,7 +21,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     private ReservationRepository reservationRepository;
 
     public RoomRepositoryImpl() {
-        this.reservationRepository = new ReservationRepositoryImpl();
         loadData();
     }
 

@@ -30,7 +30,7 @@ public class GeneralReserveController {
 
     // --- Repositórios para Acesso aos Dados ---
     private final GuestRepository guestRepository = new GuestRepositoryImpl();
-    private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+    private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     private final RoomRepository roomRepository = new RoomRepositoryImpl();
 
 

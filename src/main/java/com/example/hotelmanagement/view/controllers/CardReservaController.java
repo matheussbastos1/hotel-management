@@ -1,7 +1,10 @@
 package com.example.hotelmanagement.view.controllers;
 
 import com.example.hotelmanagement.models.Reservation;
+import com.example.hotelmanagement.models.ReservationStatus;
+import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +38,7 @@ public class CardReservaController {
         statusLabel.setText(reservation.getStatus().toString());
 
         // Mudar a cor do status (opcional, mas legal)
-        if (reservation.getStatus().toString().equals("CONFIRMED")) { // Use o nome exato do seu enum
+        if (reservation.getStatus().toString().equals("BEGGAR")) { // Use o nome exato do seu enum
             statusLabel.getStyleClass().add("card-status-confirmed");
         } else {
             statusLabel.getStyleClass().add("card-status-pending");
@@ -44,13 +47,11 @@ public class CardReservaController {
 
     @FXML
     private void handleEfetivarCheckin() {
-
-        // A LÓGICA FINAL VIRÁ AQUI
     }
 
     @FXML
     private void handleCancelarReserva() {
 
-        // A LÓGICA FINAL VIRÁ AQUI
+        }
+
     }
-}

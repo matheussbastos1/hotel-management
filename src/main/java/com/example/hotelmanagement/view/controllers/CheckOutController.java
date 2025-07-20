@@ -28,8 +28,7 @@ public class CheckOutController {
 
     // --- Repositórios ---
     private final RoomRepository roomRepository = new RoomRepositoryImpl();
-    private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
-
+    private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     // --- Componentes FXML ---
     @FXML private ComboBox<Room> occupiedRoomsComboBox;
     @FXML private VBox checkoutDetailsPane;

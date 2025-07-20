@@ -7,6 +7,7 @@ import com.example.hotelmanagement.models.Reservation;
 import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.models.Room;
 import com.example.hotelmanagement.models.RoomStatus;
+import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.impl.GuestRepositoryImpl;
 import com.example.hotelmanagement.repository.impl.InvoiceRepositoryImpl;
 import com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl;
@@ -58,14 +59,12 @@ public class StayController {
         // Em um projeto maior, usaria um framework de injeção de dependências (ex: Spring)
         // Ou um método de factory para os controladores.
         RoomRepositoryImpl roomRepository = new RoomRepositoryImpl();
-        ReservationRepositoryImpl reservationRepository = new ReservationRepositoryImpl();
-        InvoiceRepositoryImpl invoiceRepository = new InvoiceRepositoryImpl(); // Necessário para ReservationService
-        GuestRepositoryImpl guestRepository = new GuestRepositoryImpl(); // Pode ser necessário para GuestService, se for usar
-
-        // Popula alguns dados de exemplo para teste
+        ReservationRepositoryImpl reservationRepository = ReservationRepositoryImpl.getInstance();
+        GuestRepositoryImpl guestRepository = new GuestRepositoryImpl();
+        // Adicione esta linha junto com os outros repositórios
+        InvoiceRepositoryImpl invoiceRepository = new InvoiceRepositoryImpl();
         populateSampleData(roomRepository, reservationRepository, guestRepository);
-
-        roomController = new RoomController(roomRepository);
+        reservationController = new ReservationController(reservationRepository);
         // O ReservationService precisa de repositórios e do InvoiceService
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository);
         reservationService = new ReservationServiceImpl(reservationRepository, roomRepository, invoiceRepository, invoiceService);
