@@ -30,7 +30,7 @@ public class GuestController extends AbstractController<Guest> {
     @Override
     public boolean remove(int id) throws GuestNotFoundException {
         Guest guest = guestRepository.findGuestById(id);
-        guestRepository.removeGuest(guest);
+        guestRepository.removeGuest(id);
         return true;
     }
 

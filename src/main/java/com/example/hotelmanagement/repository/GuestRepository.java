@@ -6,7 +6,7 @@ import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundE
 
 
 import java.util.List;
-
+import java.util.Optional;
 
 
 public interface GuestRepository {
@@ -17,8 +17,9 @@ public interface GuestRepository {
 
     Guest findGuestById(int id) throws GuestNotFoundException;
 
-    void removeGuest(Guest guest);
+    void removeGuest(int id) throws GuestNotFoundException;
 
     void updateGuest(Guest guest) throws GuestNotFoundException, RoomNotFoundException;
 
+    public Optional<Guest> findGuestByCpf(String cpf) throws GuestNotFoundException;
 }

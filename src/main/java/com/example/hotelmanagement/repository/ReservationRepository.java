@@ -19,7 +19,7 @@ public interface ReservationRepository {
 
     Reservation findReservationById(int reservationId) throws ReservationNotFoundException;
 
-    void removeReservation(Reservation reservation);
+    void removeReservation(int id) throws ReservationNotFoundException;
 
     void updateReservation(Reservation reservation) throws RoomNotFoundException, ReservationNotFoundException;
 }

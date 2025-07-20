@@ -5,56 +5,95 @@ import com.example.hotelmanagement.models.Reservation;
 import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.ReservationNotFoundException;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
+import com.example.hotelmanagement.util.DataPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationRepositoryImpl implements ReservationRepository {
 
-    private final List<Reservation> reservations = new ArrayList<>();
+    private static final String FILE_NAME = "reservations";
+    private List<Reservation> reservations;
+
+    public ReservationRepositoryImpl() {
+        loadData();
+    }
+
+    private void loadData() {
+        reservations = DataPersistence.loadFromFile(FILE_NAME);
+        if (reservations == null) {
+            reservations = new ArrayList<>();
+        }
+    }
+
+    private void saveData() {
+        DataPersistence.saveToFile(reservations, FILE_NAME);
+    }
 
     @Override
     public void addReservation(Reservation reservation) {
-       this.reservations.add(reservation);
+        // Gera ID se não existir
+        if (reservation.getReservationId() == null) {
+            long newId = reservations.stream()
+                    .mapToLong(Reservation::getReservationId)
+                    .max()
+                    .orElse(1000L) + 1;
+            reservation.setReservationId(newId);
+        }
+        reservations.add(reservation);
+        saveData();
     }
 
     @Override
     public List<Reservation> getReservationsByGuest(Guest guest) {
+        List<Reservation> guestReservations = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getGuest().equals(guest)) {
+                guestReservations.add(reservation);
+            }
+        }
+        return guestReservations;
+    }
 
-        return new ArrayList<>(this.reservations);
+    @Override
+    public Reservation findReservationById(int id) throws ReservationNotFoundException {
+        return reservations.stream()
+                .filter(reservation -> reservation.getReservationId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ReservationNotFoundException("Reserva com ID " + id + " não encontrada"));
+    }
+
+    @Override
+    public void removeReservation(int id) throws ReservationNotFoundException {
+        boolean removed = reservations.removeIf(reservation -> reservation.getReservationId() == id);
+        if (!removed) {
+            throw new ReservationNotFoundException("Reserva com ID " + id + " não encontrada");
+        }
+        saveData();
+
     }
 
     @Override
     public List<Reservation> getAllReservations() {
-
-        return new ArrayList<>(this.reservations);
+        return new ArrayList<>(reservations);
     }
 
     @Override
-    public Reservation findReservationById(int reservationId) throws ReservationNotFoundException {
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservationId() == reservationId) {
-                return reservation;
-            }
-        }
-
-        throw new ReservationNotFoundException("Reserva com o ID " + reservationId + " não encontrada.");
-    }
-
-    @Override
-    public void removeReservation(Reservation reservation) {
-        this.reservations.remove(reservation);
-    }
-
-    @Override
-    public void updateReservation(Reservation reservation) throws RoomNotFoundException, ReservationNotFoundException {
+    public void updateReservation(Reservation reservation) throws RoomNotFoundException {
+        int index = -1;
         for (int i = 0; i < reservations.size(); i++) {
-            if (reservations.get(i).getReservationId() == reservation.getReservationId()) {
-                reservations.set(i, reservation);
-                return;
+            if (reservations.get(i).getReservationId().equals(reservation.getReservationId())) {
+                index = i;
+                break;
             }
         }
 
-        throw new ReservationNotFoundException("Reserva com o ID " + reservation.getReservationId() + " não encontrada para atualização.");
+        if (index == -1) {
+            throw new RoomNotFoundException("Reserva com ID " + reservation.getReservationId() + " não encontrada");
+        }
+
+        reservations.set(index, reservation);
+        saveData();
     }
+
 }

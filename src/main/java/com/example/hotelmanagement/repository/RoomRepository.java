@@ -13,7 +13,7 @@ public interface RoomRepository {
 
     void addRoom(Room room);
 
-    void removeRoom(Room room) throws RoomNotFoundException;
+    void removeRoom(int roomNumber) throws RoomNotFoundException;
 
     Room findRoomByNumber(int roomNumber) throws RoomNotFoundException;
 

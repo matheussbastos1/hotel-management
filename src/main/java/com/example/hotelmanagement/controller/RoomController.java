@@ -27,9 +27,9 @@ public class RoomController extends AbstractController<Room> {
     }
 
     @Override
-    public boolean remove(int id) throws RoomNotFoundException {
-        Room room = roomRepository.findRoomByNumber(id);
-        roomRepository.removeRoom(room);
+    public boolean remove(int roomNumber) throws RoomNotFoundException {
+        Room room = roomRepository.findRoomByNumber(roomNumber);
+        roomRepository.removeRoom(roomNumber);
         return true;
     }
 

@@ -2,12 +2,17 @@ package com.example.hotelmanagement.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
+import java.io.Serial;
+import java.io.Serializable;
 //Essa classe representa um hóspede em um sistema de reservas de hotel.
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
+public class Room implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private int roomNumber;
     private RoomType roomType;
     private double price;

@@ -3,6 +3,8 @@ package com.example.hotelmanagement.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -11,12 +13,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 
-public class Payment {
+public class Payment implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private int paymentId;
     private Invoice invoice;
     private BigDecimal amount;
     private LocalDateTime paymentDate;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
-
+    private int InvoiceId;
 }

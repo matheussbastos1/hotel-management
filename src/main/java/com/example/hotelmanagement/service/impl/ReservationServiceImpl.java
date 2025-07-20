@@ -10,7 +10,10 @@ import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundE
 import com.example.hotelmanagement.service.InvoiceService;
 import com.example.hotelmanagement.service.ReservationService;
 import com.example.hotelmanagement.service.serviceExceptions.InvalidOperationException;
+import com.example.hotelmanagement.util.ReportExporter;
+import com.itextpdf.text.DocumentException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -472,6 +475,20 @@ public class ReservationServiceImpl implements ReservationService {
         return dto;
     }
 
+    // Adicionar estes métodos na classe ReservationServiceImpl
 
+    public void exportReservationsToCSV(LocalDate startDate, LocalDate endDate,
+                                        RoomType roomType, ReservationStatus status,
+                                        String guestName, String filePath) throws IOException {
+        List<ReservationDetailsDTO> reservations = searchReservationsDetailed(startDate, endDate, roomType, status, guestName);
+        ReportExporter.exportToCSV(reservations, filePath);
+    }
+
+    public void exportReservationsToPDF(LocalDate startDate, LocalDate endDate,
+                                        RoomType roomType, ReservationStatus status,
+                                        String guestName, String filePath) throws DocumentException, IOException {
+        List<ReservationDetailsDTO> reservations = searchReservationsDetailed(startDate, endDate, roomType, status, guestName);
+        ReportExporter.exportToPDF(reservations, filePath);
+    }
 }
 

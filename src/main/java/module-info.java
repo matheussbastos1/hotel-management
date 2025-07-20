@@ -5,6 +5,7 @@ module org.example.hotelmanagement {
 
     // Dependência do Lombok (se você usa)
     requires static lombok;
+    requires itextpdf;
 
     // --- PERMISSÕES DE ACESSO (Onde está a correção) ---
 
