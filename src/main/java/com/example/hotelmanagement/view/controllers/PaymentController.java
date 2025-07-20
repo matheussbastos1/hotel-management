@@ -60,17 +60,14 @@ public class PaymentController {
             }
         });
 
-        // Gera código Pix aleatório
         generatedPixCode = generateRandomPixCode();
         pixCodeField.setText(generatedPixCode);
 
-        // Carrega a imagem do QR Code
         Image qrImage = new Image(getClass().getResourceAsStream("/pix-qr.jpg"));
         pixQrCodeImage.setImage(qrImage);
     }
 
     private String generateRandomPixCode() {
-        // Simula um código Pix copia e cola aleatório
         return "00020126" + UUID.randomUUID().toString().replace("-", "").substring(0, 20) + "BR.GOV.BCB.PIX" + new Random().nextInt(999999);
     }
 
@@ -132,16 +129,20 @@ public class PaymentController {
     @FXML
     private void handleVoltar(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/DashboardForm.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Dashboard Principal");
-            stage.show();
+            // Reabre a tela de checkout e fecha a de pagamento
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CheckOut.fxml")));
+            Stage checkoutStage = new Stage();
+            checkoutStage.setTitle("Tela de Check-out");
+            checkoutStage.setScene(new Scene(root));
+            checkoutStage.show();
+
+            // Fecha a tela de pagamento
+            Stage paymentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            paymentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleGenerateBankSlip() {
@@ -177,5 +178,10 @@ public class PaymentController {
 
     private void clearStatus() {
         statusLabel.setText("");
+    }
+
+    public void setAmount(double amount) {
+        amountField.setText(String.format("%.2f", amount));
+        amountField.setEditable(false);
     }
 }

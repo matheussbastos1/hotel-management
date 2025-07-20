@@ -15,7 +15,7 @@
                 <Button onAction="#handleAbrirCheckOut" prefHeight="38.0" prefWidth="178.0" styleClass="nav-button" text="Check-out" />
                 <Button onAction="#handleAbrirFormularioQuarto" prefWidth="180.0" styleClass="nav-button" text="Gerenciar Quartos" />
                 <Button onAction="#handleAbrirGestaoServicos" prefWidth="180.0" styleClass="nav-button" text="Gerenciar Serviços" />
-                <Button onAction="#handleAbrirPagamentos" prefWidth="180.0" styleClass="nav-button" text="Pagamentos" />
+                <!-- Botão de Pagamentos removido aqui -->
                 <Button onAction="#handleAbrirRelatorios" prefWidth="180.0" styleClass="nav-button" text="Relatórios" />
             </children>
         </VBox>
@@ -45,14 +45,14 @@
                         <Label fx:id="occupancyRateLabel" styleClass="metric-card-number" text="0%" />
                         <Label styleClass="metric-card-title" text="Taxa de Ocupação" />
                     </VBox>
-               <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints />
-               </rowConstraints>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                    </rowConstraints>
                 </GridPane>
 
                 <HBox spacing="20.0" VBox.vgrow="ALWAYS">

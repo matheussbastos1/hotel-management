@@ -137,3 +137,24 @@
     -fx-background-color: #3a7bd5;
     -fx-text-fill: white;
 }
+
+/* --- ESTILO PADRÃO PARA BOTÃO VOLTAR --- */
+.dashboard-btn {
+    -fx-background-color: #b0b3b8; /* cinza escuro */
+    -fx-text-fill: #fff;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 15px;
+    -fx-padding: 8 24 8 24;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #888a8d;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 2,0,0,1);
+    -fx-font-weight: bold;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+.dashboard-btn:hover {
+    -fx-background-color: #888a8d; /* tom mais escuro no hover */
+}
