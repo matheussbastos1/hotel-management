@@ -64,39 +64,57 @@ public class CheckOutController {
      * Busca os dados da reserva e calcula a conta quando um quarto é selecionado.
      */
     private void loadCheckoutDetailsForRoom(Room room) {
+        // Verifica se o quarto é válido
+        if (room == null) {
+            showAlert(Alert.AlertType.ERROR, "Erro", "Quarto inválido selecionado.");
+            return;
+        }
+
         // Encontra a reserva ativa para aquele quarto
         Optional<Reservation> reservationOpt = reservationRepository.findActiveByRoomNumber(room.getRoomNumber());
 
         if (reservationOpt.isPresent()) {
             currentReservation = reservationOpt.get();
 
+            // Verifica se a reserva tem dados válidos
+            if (currentReservation.getRoom() == null || currentReservation.getPrincipalGuest() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erro",
+                        "Dados da reserva estão incompletos. Quarto: " +
+                                (currentReservation.getRoom() != null ? currentReservation.getRoom().getRoomNumber() : "N/A"));
+                return;
+            }
+
             // --- Cálculos ---
-            long numberOfNights = ChronoUnit.DAYS.between(currentReservation.getCheckInDate(), currentReservation.getCheckOutDate());
+            long numberOfNights = ChronoUnit.DAYS.between(
+                    currentReservation.getCheckInDate(),
+                    currentReservation.getCheckOutDate()
+            );
             if (numberOfNights == 0) numberOfNights = 1;
+
             double stayCost = numberOfNights * room.getPrice();
             double servicesCost = 0.0;
             totalCost = stayCost + servicesCost;
+
+            // Atualiza a interface
             guestInfoLabel.setText("Hóspede: " + currentReservation.getPrincipalGuest().getName());
             stayDetailsLabel.setText(numberOfNights + " noite(s) x R$ " + String.format("%.2f", room.getPrice()));
             staySubtotalLabel.setText("Subtotal Estadia: R$ " + String.format("%.2f", stayCost));
-
-            // servicesListView.getItems().setAll(...); // Aqui você populária a lista de serviços
             servicesSubtotalLabel.setText("Subtotal Serviços: R$ " + String.format("%.2f", servicesCost));
-
             totalAmountLabel.setText("TOTAL A PAGAR: R$ " + String.format("%.2f", totalCost));
 
-            // Mostra o painel de detalhes e habilita o botão
+            // Mostra o painel de detalhes e habilita os botões
             checkoutDetailsPane.setVisible(true);
             checkoutDetailsPane.setManaged(true);
             finalizeButton.setDisable(false);
             obterPagamentoButton.setDisable(false);
         } else {
-            // Caso não encontre uma reserva (situação de erro)
+            // Caso não encontre uma reserva
             checkoutDetailsPane.setVisible(false);
             checkoutDetailsPane.setManaged(false);
             finalizeButton.setDisable(true);
             obterPagamentoButton.setDisable(true);
-            showAlert(Alert.AlertType.ERROR, "Erro", "Nenhuma reserva ativa encontrada para o quarto " + room.getRoomNumber());
+            showAlert(Alert.AlertType.ERROR, "Erro",
+                    "Nenhuma reserva ativa encontrada para o quarto " + room.getRoomNumber());
         }
     }
 
