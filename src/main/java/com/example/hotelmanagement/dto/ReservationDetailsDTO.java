@@ -36,4 +36,12 @@ public class ReservationDetailsDTO {
     private PaymentStatus paymentStatus;
     private String paymentMethod;
     private LocalDateTime lastPaymentDate;
+
+    public void setIsPaid(boolean b) {
+        this.isPaid = b;
+    }
+
+    public void setPaid(boolean paid) {
+        this.isPaid = paid;
+    }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_LEFT" spacing="20.0" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.ReservationReportController">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+    <children>
+        <Label text="Relatório de Reservas" styleClass="dashboard-title" />
+
+        <!-- Filtros -->
+        <HBox spacing="15.0" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Data Início:" />
+                <DatePicker fx:id="startDatePicker" />
+                <Label text="Data Fim:" />
+                <DatePicker fx:id="endDatePicker" />
+                <Button text="Filtrar" onAction="#handleFilter" styleClass="primary-button" />
+            </children>
+        </HBox>
+
+        <!-- Tabela de Reservas -->
+        <TableView fx:id="reservationsTableView" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" minWidth="50" />
+                <TableColumn fx:id="guestNameColumn" text="Hóspede" minWidth="150" />
+                <TableColumn fx:id="roomNumberColumn" text="Quarto" minWidth="80" />
+                <TableColumn fx:id="checkInColumn" text="Check-in" minWidth="100" />
+                <TableColumn fx:id="checkOutColumn" text="Check-out" minWidth="100" />
+                <TableColumn fx:id="statusColumn" text="Status" minWidth="100" />
+                <TableColumn fx:id="totalAmountColumn" text="Valor Total" minWidth="120" />
+                <TableColumn fx:id="paymentStatusColumn" text="Pagamento" minWidth="100" />
+            </columns>
+        </TableView>
+
+        <!-- Botões de Exportação -->
+        <HBox spacing="15.0" alignment="CENTER">
+            <children>
+                <Button text="Exportar CSV" onAction="#handleExportCSV" styleClass="report-button" />
+                <Button text="Exportar PDF" onAction="#handleExportPDF" styleClass="report-button" />
+            </children>
+        </HBox>
+
+        <Button text="Voltar aos Relatórios" onAction="#handleVoltar" styleClass="secondary-button" />
+    </children>
+</VBox>

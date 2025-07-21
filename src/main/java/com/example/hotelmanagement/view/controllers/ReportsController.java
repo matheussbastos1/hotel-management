@@ -17,19 +17,24 @@ public class ReportsController {
      * Chamado pelo botão "Relatório de Estadias".
      * Abre a tela específica de estadias.
      */
-
     @FXML
     private void handleOpenEstadiaReport(ActionEvent event) {
-        // Supondo que o nome do seu arquivo seja StayReport.fxml
         loadReportScreen("/StayView.fxml", "Relatório de Estadias", event);
     }
+
     @FXML
     private void handleOpenFinancialReport(ActionEvent event) {
-        // Certifique-se de que o nome do arquivo FXML está correto
         loadReportScreen("/FinancialReportView.fxml", "Relatório Financeiro", event);
     }
 
-    // Você pode adicionar outros métodos para os outros botões aqui no futuro...
+    /**
+     * Chamado pelo botão "Relatório de Reservas".
+     * Abre a tela específica de relatórios de reservas.
+     */
+    @FXML
+    private void handleOpenReservationReport(ActionEvent event) {
+        loadReportScreen("/ReservationReportView.fxml", "Relatório de Reservas", event);
+    }
 
     /**
      * Chamado pelo botão "Voltar ao Dashboard".
