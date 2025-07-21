@@ -83,8 +83,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             RoomFormController formController = loader.getController();
-            RoomController roomController = new RoomController(new RoomRepositoryImpl());
-            formController.setRoomController(roomController);
+            RoomController roomController = new RoomController(RoomRepositoryImpl.getInstance());            formController.setRoomController(roomController);
 
             Stage stage = new Stage();
             stage.setTitle("Gerenciar Quartos");

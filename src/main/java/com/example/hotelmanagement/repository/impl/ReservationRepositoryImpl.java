@@ -17,9 +17,16 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     private static final String FILE_NAME = "reservations";
     private List<Reservation> reservations;
-
-    public ReservationRepositoryImpl() {
+    private static ReservationRepositoryImpl instance = null;
+    private ReservationRepositoryImpl() {
         loadData();
+    }
+
+    public static ReservationRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new ReservationRepositoryImpl();
+        }
+        return instance;
     }
 
     private void loadData() {

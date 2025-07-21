@@ -12,7 +12,7 @@
         <Label styleClass="dashboard-title" text="Check-ins Pendentes" />
 
         <HBox alignment="CENTER">
-            <TextField fx:id="searchField" prefWidth="400.0" promptText="Buscar por nome do hóspede..." text="balalol" />
+            <TextField fx:id="searchField" prefWidth="400.0" promptText="Buscar por nome do hóspede..."  />
         </HBox>
 
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">

@@ -8,7 +8,7 @@ import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.RoomRepository;
 import com.example.hotelmanagement.repository.repositoryExceptions.RoomNotFoundException;
 import com.example.hotelmanagement.util.DataPersistence;
-
+import com.example.hotelmanagement.models.Reservation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,19 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     private static final String FILE_NAME = "rooms";
     private List<Room> rooms;
-    private ReservationRepository reservationRepository;
-
-    public RoomRepositoryImpl() {
-        this.reservationRepository = new ReservationRepositoryImpl();
+    private final ReservationRepository reservationRepository;
+    private static RoomRepositoryImpl instance = null;
+    private RoomRepositoryImpl() {
+        // Pega a instância ÚNICA do repositório de reservas. ISSO CORRIGE O NULLPOINTEREXCEPTION.
+        this.reservationRepository = ReservationRepositoryImpl.getInstance();
         loadData();
+    }
+
+    public static RoomRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new RoomRepositoryImpl();
+        }
+        return instance;
     }
 
     private void loadData() {
@@ -99,25 +107,20 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public List<Room> findAvailableRoomsByDateRange(LocalDate checkIn, LocalDate checkOut) {
-        List<Room> availableRooms = new ArrayList<>();
+        // 1. Pega a lista de TODAS as reservas existentes
+        List<Reservation> allReservations = reservationRepository.getAllReservations();
 
-        for (Room room : rooms) {
-            if (room.getStatus() == RoomStatus.AVAILABLE) {
-                // Verifica se o quarto não tem reservas conflitantes no período
-                boolean isAvailable = reservationRepository.getAllReservations().stream()
-                        .noneMatch(reservation ->
-                                reservation.getRoom().getRoomNumber() == room.getRoomNumber() &&
-                                        reservation.getStatus() != ReservationStatus.CANCELLED &&
-                                        datesOverlap(checkIn, checkOut, reservation.getCheckInDate(), reservation.getCheckOutDate())
-                        );
+        // 2. Filtra para encontrar os números dos quartos já reservados no período
+        List<Integer> reservedRoomNumbers = allReservations.stream()
+                .filter(reservation -> reservation.getStatus() != ReservationStatus.CANCELLED &&
+                        datesOverlap(checkIn, checkOut, reservation.getCheckInDate(), reservation.getCheckOutDate()))
+                .map(reservation -> reservation.getRoom().getRoomNumber())
+                .collect(Collectors.toList());
 
-                if (isAvailable) {
-                    availableRooms.add(room);
-                }
-            }
-        }
-
-        return availableRooms;
+        // 3. Retorna todos os quartos do hotel, exceto aqueles que já estão reservados
+        return rooms.stream()
+                .filter(room -> !reservedRoomNumbers.contains(room.getRoomNumber()))
+                .collect(Collectors.toList());
     }
 
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {

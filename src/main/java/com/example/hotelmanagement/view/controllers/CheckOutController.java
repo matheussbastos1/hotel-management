@@ -26,9 +26,9 @@ import java.util.Optional;
 
 public class CheckOutController {
 
-    private final RoomRepository roomRepository = new RoomRepositoryImpl();
-    private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+    private final RoomRepository roomRepository = RoomRepositoryImpl.getInstance();
 
+    private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     @FXML private ComboBox<Room> occupiedRoomsComboBox;
     @FXML private VBox checkoutDetailsPane;
     @FXML private Label guestInfoLabel;
@@ -45,8 +45,11 @@ public class CheckOutController {
 
     @FXML
     public void initialize() {
+        // Carrega apenas os quartos que estão OCUPADOS
         List<Room> occupiedRooms = roomRepository.getRoomsByStatus(RoomStatus.OCCUPIED);
         occupiedRoomsComboBox.setItems(FXCollections.observableArrayList(occupiedRooms));
+
+        // Adiciona um "ouvinte" para quando um quarto for selecionado
         occupiedRoomsComboBox.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> {
                     if (newVal != null) {
@@ -56,10 +59,17 @@ public class CheckOutController {
         );
     }
 
+    /**
+     * Busca os dados da reserva e calcula a conta quando um quarto é selecionado.
+     */
     private void loadCheckoutDetailsForRoom(Room room) {
+        // Encontra a reserva ativa para aquele quarto
         Optional<Reservation> reservationOpt = reservationRepository.findActiveByRoomNumber(room.getRoomNumber());
+
         if (reservationOpt.isPresent()) {
             currentReservation = reservationOpt.get();
+
+            // --- Cálculos ---
             long numberOfNights = ChronoUnit.DAYS.between(currentReservation.getCheckInDate(), currentReservation.getCheckOutDate());
             if (numberOfNights == 0) numberOfNights = 1;
             double stayCost = numberOfNights * room.getPrice();
@@ -68,13 +78,19 @@ public class CheckOutController {
             guestInfoLabel.setText("Hóspede: " + currentReservation.getPrincipalGuest().getName());
             stayDetailsLabel.setText(numberOfNights + " noite(s) x R$ " + String.format("%.2f", room.getPrice()));
             staySubtotalLabel.setText("Subtotal Estadia: R$ " + String.format("%.2f", stayCost));
+
+            // servicesListView.getItems().setAll(...); // Aqui você populária a lista de serviços
             servicesSubtotalLabel.setText("Subtotal Serviços: R$ " + String.format("%.2f", servicesCost));
+
             totalAmountLabel.setText("TOTAL A PAGAR: R$ " + String.format("%.2f", totalCost));
+
+            // Mostra o painel de detalhes e habilita o botão
             checkoutDetailsPane.setVisible(true);
             checkoutDetailsPane.setManaged(true);
             finalizeButton.setDisable(false);
             obterPagamentoButton.setDisable(false);
         } else {
+            // Caso não encontre uma reserva (situação de erro)
             checkoutDetailsPane.setVisible(false);
             checkoutDetailsPane.setManaged(false);
             finalizeButton.setDisable(true);
@@ -86,16 +102,22 @@ public class CheckOutController {
     @FXML
     private void handleFinalizarCheckOut() {
         if (currentReservation == null) return;
+
         double totalAPagar = Double.parseDouble(totalAmountLabel.getText().replaceAll("[^\\d.,]", "").replace(",", "."));
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmação de Pagamento");
         alert.setHeaderText("Finalizar o Check-out do quarto " + currentReservation.getRoom().getRoomNumber() + "?");
         alert.setContentText("O valor total da conta é R$ " + String.format("%.2f", totalAPagar) + ".\n\nVocê confirma o recebimento do pagamento?");
+
         ButtonType buttonTypeSim = new ButtonType("Sim, Finalizar");
         ButtonType buttonTypeNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(buttonTypeSim, buttonTypeNao);
+
         alert.showAndWait().ifPresent(response -> {
             if (response == buttonTypeSim) {
+                // --- CORREÇÃO AQUI ---
+                // Pega o quarto da reserva atual e manda o repositório atulizar su status.
                 Room roomToCheckout = currentReservation.getRoom();
                 roomToCheckout.setStatus(RoomStatus.AVAILABLE);
                 try {
@@ -103,6 +125,9 @@ public class CheckOutController {
                 } catch (RoomNotFoundException e) {
                     showAlert(Alert.AlertType.ERROR, "Erro", "Quarto não encontrado para atualização.");
                 }
+                // Aqui você também atualizaria o status da reserva para FINALIZADA
+                // reservationRepository.updateStatus(currentReservation.getId(), ReservationStatus.COMPLETED);
+
                 showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Check-out realizado com sucesso!");
                 resetScreen();
             }
@@ -148,11 +173,22 @@ public class CheckOutController {
     @FXML
     private void handleVoltar(ActionEvent event) {
         try {
+            // Carrega o arquivo FXML da tela de dashboard
             Parent dashboardRoot = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
+
+            // Pega a janela atual (o Stage) a partir do evento do clique
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Cria uma nova cena com o conteúdo da tela de dashboard
             Scene scene = new Scene(dashboardRoot);
+
+            // Define a nova cena na janela
             stage.setScene(scene);
+
+            // Atualiza o título da janela
             stage.setTitle("Tela Principal");
+
+            // Mostra a janela atualizada
             stage.show();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível voltar para a tela principal.");
