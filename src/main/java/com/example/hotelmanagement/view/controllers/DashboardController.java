@@ -79,22 +79,48 @@ public class DashboardController {
     @FXML
     private void handleAbrirFormularioQuarto(ActionEvent event) {
         try {
+            System.out.println("Abrindo formulário de quarto...");
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RoomForm.fxml"));
             Parent root = loader.load();
 
             RoomFormController formController = loader.getController();
-            RoomController roomController = new RoomController(RoomRepositoryImpl.getInstance());            formController.setRoomController(roomController);
+
+            // Verifica se a instância do repositório está funcionando
+            RoomRepositoryImpl roomRepository = RoomRepositoryImpl.getInstance();
+            if (roomRepository == null) {
+                System.err.println("ERRO: RoomRepository é nulo!");
+                return;
+            }
+
+            RoomController roomController = new RoomController(roomRepository);
+            if (roomController == null) {
+                System.err.println("ERRO: RoomController é nulo!");
+                return;
+            }
+
+            formController.setRoomController(roomController);
+            System.out.println("RoomController configurado com sucesso");
 
             Stage stage = new Stage();
             stage.setTitle("Gerenciar Quartos");
             stage.setScene(new Scene(root));
-            stage.show();
 
-            // Fecha o dashboard
-            Stage dashboardStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            dashboardStage.close();
+            // Adicione um handler para debug quando a janela fechar
+            stage.setOnCloseRequest(e -> System.out.println("Janela de formulário fechando..."));
+
+            stage.show();
+            System.out.println("Formulário aberto com sucesso");
+
+            // NÃO feche o dashboard automaticamente
+            // Stage dashboardStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            // dashboardStage.close();
 
         } catch (IOException e) {
+            System.err.println("Erro ao carregar FXML: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao abrir formulário: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -143,4 +169,6 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+
 }

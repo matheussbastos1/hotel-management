@@ -207,71 +207,102 @@ public class CheckOutController {
 
 
     @FXML
-
     private void handleFinalizarCheckOut() {
-
         if (currentReservation == null) return;
-
-
 
         double totalAPagar = totalCost;
 
-
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-
         alert.setTitle("Confirmação de Pagamento");
-
         alert.setHeaderText("Finalizar o Check-out do quarto " + currentReservation.getRoom().getRoomNumber() + "?");
-
         alert.setContentText("O valor total da conta é R$ " + String.format("%.2f", totalAPagar) + ".\n\nVocê confirma o recebimento do pagamento?");
 
-
-
         ButtonType buttonTypeSim = new ButtonType("Sim, Finalizar");
-
         ButtonType buttonTypeNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
-
         alert.getButtonTypes().setAll(buttonTypeSim, buttonTypeNao);
 
-
-
         alert.showAndWait().ifPresent(response -> {
-
             if (response == buttonTypeSim) {
+                // Registra o pagamento usando as classes existentes
+                registerPaymentAndInvoice();
 
                 Room roomToCheckout = currentReservation.getRoom();
-
                 roomToCheckout.setStatus(RoomStatus.AVAILABLE);
-
                 try {
-
                     roomRepository.updateRoom(roomToCheckout);
+                    // Atualiza status da reserva para CHECKED_OUT
+                    currentReservation.setStatus(com.example.hotelmanagement.models.ReservationStatus.CHECKED_OUT);
+                    reservationRepository.updateReservation(currentReservation);
 
-
-
-// LIMPA OS SERVIÇOS APÓS O CHECKOUT
-
+                    // Limpa os serviços após o checkout
                     ServicoManager.limparServicosPorQuarto(roomToCheckout.toString());
 
-
-
-                } catch (RoomNotFoundException e) {
-
-                    showAlert(Alert.AlertType.ERROR, "Erro", "Quarto não encontrado para atualização.");
-
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, "Erro", "Erro ao finalizar checkout: " + e.getMessage());
+                    return;
                 }
 
-
-
                 showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Check-out realizado com sucesso!");
-
                 resetScreen();
-
             }
-
         });
+    }
 
+    private void registerPaymentAndInvoice() {
+        try {
+            // Cria a invoice
+            com.example.hotelmanagement.models.Invoice invoice = new com.example.hotelmanagement.models.Invoice();
+            invoice.setInvoiceId(generateInvoiceId());
+            invoice.setAmountSpent(java.math.BigDecimal.valueOf(totalCost));
+            invoice.setPaid(true);
+
+            // Cria o pagamento
+            com.example.hotelmanagement.models.Payment payment = new com.example.hotelmanagement.models.Payment();
+            payment.setPaymentId(generatePaymentId());
+            payment.setInvoice(invoice);
+            payment.setInvoiceId(invoice.getInvoiceId());
+            payment.setAmount(java.math.BigDecimal.valueOf(totalCost));
+            payment.setPaymentDate(java.time.LocalDateTime.now());
+            payment.setPaymentMethod(com.example.hotelmanagement.models.PaymentMethod.CASH); // Padrão
+            payment.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.COMPLETED);
+
+            // Salva usando repositórios
+            saveInvoice(invoice);
+            savePayment(payment);
+
+        } catch (Exception e) {
+            System.err.println("Erro ao registrar pagamento: " + e.getMessage());
+        }
+    }
+
+    private void saveInvoice(com.example.hotelmanagement.models.Invoice invoice) {
+        List<com.example.hotelmanagement.models.Invoice> invoices = com.example.hotelmanagement.util.DataPersistence.loadFromFile("invoices");
+        if (invoices == null) {
+            invoices = new java.util.ArrayList<>();
+        }
+        invoices.add(invoice);
+        com.example.hotelmanagement.util.DataPersistence.saveToFile(invoices, "invoices");
+    }
+
+    private void savePayment(com.example.hotelmanagement.models.Payment payment) {
+        List<com.example.hotelmanagement.models.Payment> payments = com.example.hotelmanagement.util.DataPersistence.loadFromFile("payments");
+        if (payments == null) {
+            payments = new java.util.ArrayList<>();
+        }
+        payments.add(payment);
+        com.example.hotelmanagement.util.DataPersistence.saveToFile(payments, "payments");
+    }
+
+    private int generateInvoiceId() {
+        List<com.example.hotelmanagement.models.Invoice> invoices = com.example.hotelmanagement.util.DataPersistence.loadFromFile("invoices");
+        if (invoices == null || invoices.isEmpty()) return 1;
+        return invoices.stream().mapToInt(com.example.hotelmanagement.models.Invoice::getInvoiceId).max().orElse(0) + 1;
+    }
+
+    private int generatePaymentId() {
+        List<com.example.hotelmanagement.models.Payment> payments = com.example.hotelmanagement.util.DataPersistence.loadFromFile("payments");
+        if (payments == null || payments.isEmpty()) return 1;
+        return payments.stream().mapToInt(com.example.hotelmanagement.models.Payment::getPaymentId).max().orElse(0) + 1;
     }
 
 

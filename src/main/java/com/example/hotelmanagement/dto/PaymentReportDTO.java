@@ -10,11 +10,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentReportDTO {
-    private int paymentId;
-    private Long guestId; // Para poder filtrar
+    private Integer paymentId;
+    private Integer invoiceId;
     private String guestName;
     private LocalDateTime paymentDate;
     private BigDecimal amount;
     private String paymentMethod;
     private String paymentStatus;
+    private Integer roomNumber;
 }
