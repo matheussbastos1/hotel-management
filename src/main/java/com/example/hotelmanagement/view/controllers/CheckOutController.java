@@ -256,15 +256,20 @@ public class CheckOutController {
             invoice.setAmountSpent(java.math.BigDecimal.valueOf(totalCost));
             invoice.setPaid(true);
 
-            // Cria o pagamento
+            // Cria o pagamento com informações completas do hóspede
             com.example.hotelmanagement.models.Payment payment = new com.example.hotelmanagement.models.Payment();
             payment.setPaymentId(generatePaymentId());
             payment.setInvoice(invoice);
             payment.setInvoiceId(invoice.getInvoiceId());
             payment.setAmount(java.math.BigDecimal.valueOf(totalCost));
             payment.setPaymentDate(java.time.LocalDateTime.now());
-            payment.setPaymentMethod(com.example.hotelmanagement.models.PaymentMethod.CASH); // Padrão
+            payment.setPaymentMethod(com.example.hotelmanagement.models.PaymentMethod.CASH);
             payment.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.COMPLETED);
+
+            // Adicionar informações diretas do hóspede e reserva
+            payment.setGuestName(currentReservation.getPrincipalGuest().getName());
+            payment.setRoomNumber(currentReservation.getRoom().getRoomNumber());
+            payment.setReservationId(currentReservation.getReservationId());
 
             // Salva usando repositórios
             saveInvoice(invoice);
@@ -272,6 +277,7 @@ public class CheckOutController {
 
         } catch (Exception e) {
             System.err.println("Erro ao registrar pagamento: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

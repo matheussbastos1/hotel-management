@@ -23,4 +23,7 @@ public class Payment implements Serializable {
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
     private int InvoiceId;
+    private String guestName;
+    private int roomNumber;
+    private Long reservationId;
 }

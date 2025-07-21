@@ -117,17 +117,9 @@ public class FinancialReportController {
         dto.setPaymentMethod(payment.getPaymentMethod() != null ? payment.getPaymentMethod().toString() : "N/A");
         dto.setPaymentStatus(payment.getPaymentStatus() != null ? payment.getPaymentStatus().toString() : "N/A");
 
-        // Busca informações do hóspede e quarto através da invoice/reserva
-        try {
-            String guestName = findGuestNameFromPayment(payment);
-            Integer roomNumber = findRoomNumberFromPayment(payment);
-
-            dto.setGuestName(guestName != null ? guestName : "Hóspede não encontrado");
-            dto.setRoomNumber(roomNumber != null ? roomNumber : 0);
-        } catch (Exception e) {
-            dto.setGuestName("Erro ao buscar hóspede");
-            dto.setRoomNumber(0);
-        }
+        // Usar as informações diretas do pagamento
+        dto.setGuestName(payment.getGuestName() != null ? payment.getGuestName() : "Hóspede não identificado");
+        dto.setRoomNumber(payment.getRoomNumber() != 0 ? payment.getRoomNumber() : 0);
 
         return dto;
     }
