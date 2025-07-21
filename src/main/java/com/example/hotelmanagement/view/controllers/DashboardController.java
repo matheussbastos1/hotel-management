@@ -24,6 +24,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import com.example.hotelmanagement.models.ReservationStatus;
+import com.example.hotelmanagement.repository.impl.GuestRepositoryImpl;
+import com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl;
+
 public class DashboardController {
 
     @FXML private Label dateTimeLabel;
@@ -50,16 +54,32 @@ public class DashboardController {
     }
 
     private void loadDashboardData() {
-        int occupiedRooms = 45;
-        int availableRooms = 20;
-        int maintenanceRooms = 5;
+        RoomRepositoryImpl roomRepo = RoomRepositoryImpl.getInstance();
+        ReservationRepositoryImpl reservationRepo = ReservationRepositoryImpl.getInstance();
+        GuestRepositoryImpl guestRepo = new GuestRepositoryImpl();
+
+        // Quartos
+        int occupiedRooms = (int) roomRepo.getAllRooms().stream()
+                .filter(room -> room.getStatus().name().equals("OCCUPIED"))
+                .count();
+        int availableRooms = (int) roomRepo.getAllRooms().stream()
+                .filter(room -> room.getStatus().name().equals("AVAILABLE"))
+                .count();
+        int maintenanceRooms = (int) roomRepo.getAllRooms().stream()
+                .filter(room -> room.getStatus().name().equals("MAINTENANCE"))
+                .count();
         int totalHotelRooms = occupiedRooms + availableRooms + maintenanceRooms;
-        int currentGuests = 110;
+
+        int currentGuests = reservationRepo.getAllReservations().stream()
+                .filter(res -> res.getStatus() == ReservationStatus.CHECKED_IN)
+                .mapToInt(res -> res.getGuest() != null ? 1 : 0)
+                .sum();
+
         final int MAX_GUEST_CAPACITY = 350;
 
         occupiedRoomsLabel.setText(String.valueOf(occupiedRooms));
         guestCountLabel.setText(String.valueOf(currentGuests));
-        occupancyRateLabel.setText(String.format("%.0f%%", (double) occupiedRooms / totalHotelRooms * 100));
+        occupancyRateLabel.setText(String.format("%.0f%%", totalHotelRooms == 0 ? 0 : (double) occupiedRooms / totalHotelRooms * 100));
 
         ObservableList<PieChart.Data> pieChartData =
                 FXCollections.observableArrayList(
