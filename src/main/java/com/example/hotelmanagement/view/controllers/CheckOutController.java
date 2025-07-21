@@ -1,6 +1,7 @@
 package com.example.hotelmanagement.view.controllers;
 
 import com.example.hotelmanagement.models.Reservation;
+import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.models.Room;
 import com.example.hotelmanagement.models.RoomStatus;
 import com.example.hotelmanagement.repository.ReservationRepository;
@@ -116,20 +117,25 @@ public class CheckOutController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == buttonTypeSim) {
-                // --- CORREÇÃO AQUI ---
-                // Pega o quarto da reserva atual e manda o repositório atulizar su status.
-                Room roomToCheckout = currentReservation.getRoom();
-                roomToCheckout.setStatus(RoomStatus.AVAILABLE);
                 try {
-                    roomRepository.updateRoom(roomToCheckout);
-                } catch (RoomNotFoundException e) {
-                    showAlert(Alert.AlertType.ERROR, "Erro", "Quarto não encontrado para atualização.");
-                }
-                // Aqui você também atualizaria o status da reserva para FINALIZADA
-                // reservationRepository.updateStatus(currentReservation.getId(), ReservationStatus.COMPLETED);
+                    // Atualiza o status da reserva para CHECKED_OUT
+                    currentReservation.setStatus(ReservationStatus.CHECKED_OUT);
+                    currentReservation.setUpdatedAt(java.time.LocalDateTime.now());
 
-                showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Check-out realizado com sucesso!");
-                resetScreen();
+                    // Atualiza o status do quarto para AVAILABLE
+                    Room room = currentReservation.getRoom();
+                    room.setStatus(RoomStatus.AVAILABLE);
+                    roomRepository.updateRoom(room);
+
+                    // Persiste as alterações no banco de dados
+                    reservationRepository.updateReservation(currentReservation);
+
+                    showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Check-out finalizado com sucesso!\nPagamento processado.");
+                    resetScreen();
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, "Erro", "Erro ao finalizar o check-out: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
     }
