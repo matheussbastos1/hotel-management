@@ -17,10 +17,8 @@
         <TilePane hgap="20.0" vgap="20.0" prefColumns="3">
             <children>
                 <Button onAction="#handleOpenEstadiaReport" text="Relatório de Estadias" styleClass="report-button" />
-
                 <Button onAction="#handleOpenFinancialReport" text="Relatório Financeiro" styleClass="report-button" />
-
-
+                <Button onAction="#handleOpenReservationReport" text="Relatório de Reservas" styleClass="report-button" />
             </children>
         </TilePane>
 
