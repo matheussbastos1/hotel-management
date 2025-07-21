@@ -11,118 +11,126 @@ import com.example.hotelmanagement.util.DataPersistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ReservationRepositoryImpl implements ReservationRepository {
 
-    private static final String FILE_NAME = "reservations";
-    private List<Reservation> reservations;
-    private static ReservationRepositoryImpl instance = null;
+    private static ReservationRepositoryImpl instance;
+    private static final String RESERVATIONS_FILE = "reservations";
+
     public ReservationRepositoryImpl() {
-        loadData();
     }
 
-    public static ReservationRepositoryImpl getInstance() {
+    public static synchronized ReservationRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new ReservationRepositoryImpl();
         }
         return instance;
     }
 
-    private void loadData() {
-        reservations = DataPersistence.loadFromFile(FILE_NAME);
+    @Override
+    public void addReservation(Reservation reservation) {
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
         if (reservations == null) {
             reservations = new ArrayList<>();
         }
+
+        // Define um ID único para a nova reserva
+        long newId = reservations.stream()
+                .mapToLong(r -> r.getReservationId() != null ? r.getReservationId() : 0L)
+                .max()
+                .orElse(0L) + 1;
+
+        reservation.setReservationId(newId);
+        reservations.add(reservation);
+        DataPersistence.saveToFile(reservations, RESERVATIONS_FILE);
     }
-
-    private void saveData() {
-        DataPersistence.saveToFile(reservations, FILE_NAME);
-    }
-
-   // ReservationRepositoryImpl.java
-   @Override
-   public Optional<Reservation> findActiveByRoomNumber(int roomNumber) {
-       for (Reservation reservation : reservations) {
-           if (reservation.getRoom().getRoomNumber() == roomNumber
-               && reservation.getStatus() == ReservationStatus.CHECKED_IN) {
-               return Optional.of(reservation);
-           }
-       }
-       return Optional.empty();
-   }
-   @Override
-   public List<Reservation> findByStatus(ReservationStatus status) {
-       return reservations.stream()
-           .filter(reservation -> reservation.getStatus() == status)
-           .collect(Collectors.toList());
-   }
-
 
     @Override
-    public void addReservation(Reservation reservation) {
-        // Gera ID se não existir
-        if (reservation.getReservationId() == null) {
-            long newId = reservations.stream()
-                    .mapToLong(Reservation::getReservationId)
-                    .max()
-                    .orElse(1000L) + 1;
-            reservation.setReservationId(newId);
-        }
-        reservations.add(reservation);
-        saveData();
+    public Optional<Reservation> findActiveByRoomNumber(int roomNumber) {
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) return Optional.empty();
+
+        return reservations.stream()
+                .filter(r -> r.getRoom() != null && r.getRoom().getRoomNumber() == roomNumber)
+                .filter(r -> r.getStatus() == ReservationStatus.CHECKED_IN)
+                .findFirst();
+    }
+
+    @Override
+    public List<Reservation> findByStatus(ReservationStatus status) {
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) return new ArrayList<>();
+
+        return reservations.stream()
+                .filter(r -> r.getStatus() == status)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     @Override
     public List<Reservation> getReservationsByGuest(Guest guest) {
-        List<Reservation> guestReservations = new ArrayList<>();
-        for (Reservation reservation : reservations) {
-            if (reservation.getGuest().equals(guest)) {
-                guestReservations.add(reservation);
-            }
-        }
-        return guestReservations;
-    }
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) return new ArrayList<>();
 
-    @Override
-    public Reservation findReservationById(int id) throws ReservationNotFoundException {
         return reservations.stream()
-                .filter(reservation -> reservation.getReservationId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ReservationNotFoundException("Reserva com ID " + id + " não encontrada"));
-    }
-
-    @Override
-    public void removeReservation(int id) throws ReservationNotFoundException {
-        boolean removed = reservations.removeIf(reservation -> reservation.getReservationId() == id);
-        if (!removed) {
-            throw new ReservationNotFoundException("Reserva com ID " + id + " não encontrada");
-        }
-        saveData();
-
+                .filter(r -> r.getPrincipalGuest() != null &&
+                        r.getPrincipalGuest().getId() != null &&
+                        r.getPrincipalGuest().getId().equals(guest.getId()))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     @Override
     public List<Reservation> getAllReservations() {
-        return new ArrayList<>(reservations);
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        return reservations != null ? new ArrayList<>(reservations) : new ArrayList<>();
     }
 
     @Override
-    public void updateReservation(Reservation reservation) throws RoomNotFoundException {
-        int index = -1;
-        for (int i = 0; i < reservations.size(); i++) {
-            if (reservations.get(i).getReservationId().equals(reservation.getReservationId())) {
-                index = i;
-                break;
-            }
+    public Reservation findReservationById(int reservationId) throws ReservationNotFoundException {
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) {
+            throw new ReservationNotFoundException("Reserva não encontrada com ID: " + reservationId);
         }
 
-        if (index == -1) {
-            throw new RoomNotFoundException("Reserva com ID " + reservation.getReservationId() + " não encontrada");
-        }
-
-        reservations.set(index, reservation);
-        saveData();
+        return reservations.stream()
+                .filter(r -> r.getReservationId() != null && r.getReservationId() == reservationId)
+                .findFirst()
+                .orElseThrow(() -> new ReservationNotFoundException("Reserva não encontrada com ID: " + reservationId));
     }
 
+    @Override
+    public void removeReservation(int id) throws ReservationNotFoundException {
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) {
+            throw new ReservationNotFoundException("Reserva não encontrada com ID: " + id);
+        }
+
+        boolean removed = reservations.removeIf(r -> r.getReservationId() != null && r.getReservationId() == id);
+        if (!removed) {
+            throw new ReservationNotFoundException("Reserva não encontrada com ID: " + id);
+        }
+        DataPersistence.saveToFile(reservations, RESERVATIONS_FILE);
+    }
+
+    @Override
+    public void updateReservation(Reservation reservation) throws RoomNotFoundException, ReservationNotFoundException {
+        if (reservation == null || reservation.getReservationId() == null) {
+            throw new ReservationNotFoundException("Reserva inválida");
+        }
+
+        List<Reservation> reservations = DataPersistence.loadFromFile(RESERVATIONS_FILE);
+        if (reservations == null) {
+            throw new ReservationNotFoundException("Reserva não encontrada com ID: " + reservation.getReservationId());
+        }
+
+        for (int i = 0; i < reservations.size(); i++) {
+            Reservation existing = reservations.get(i);
+            if (existing.getReservationId() != null &&
+                    existing.getReservationId().equals(reservation.getReservationId())) {
+                reservations.set(i, reservation);
+                DataPersistence.saveToFile(reservations, RESERVATIONS_FILE);
+                return;
+            }
+        }
+        throw new ReservationNotFoundException("Reserva não encontrada com ID: " + reservation.getReservationId());
+    }
 }

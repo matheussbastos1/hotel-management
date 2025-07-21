@@ -158,3 +158,58 @@
 .dashboard-btn:hover {
     -fx-background-color: #888a8d; /* tom mais escuro no hover */
 }
+
+.info-pane {
+    -fx-background-color: #f0f8ff;
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.info-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+.guest-name-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E8B57;
+}
+
+.guest-details-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+}
+
+.card-status-pending {
+    -fx-background-color: #ffc107;
+    -fx-text-fill: #212529;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 3px;
+}
+
+.card-status-confirmed {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 3px;
+}
+
+.card-status-cancelled {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 3px;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}

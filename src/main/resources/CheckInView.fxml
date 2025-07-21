@@ -11,6 +11,18 @@
     <children>
         <Label styleClass="dashboard-title" text="Check-ins Pendentes" />
 
+        <!-- Seção de informações do hóspede selecionado -->
+        <VBox fx:id="guestInfoPane" visible="false" managed="false" spacing="10.0" styleClass="info-pane">
+            <padding>
+                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+            </padding>
+            <children>
+                <Label text="Hóspede Selecionado:" styleClass="info-label" />
+                <Label fx:id="selectedGuestNameLabel" text="Nome do Hóspede" styleClass="guest-name-label" />
+                <Label fx:id="selectedGuestDetailsLabel" text="Detalhes da Reserva" styleClass="guest-details-label" />
+            </children>
+        </VBox>
+
         <HBox alignment="CENTER">
             <TextField fx:id="searchField" prefWidth="400.0" promptText="Buscar por nome do hóspede..."  />
         </HBox>
