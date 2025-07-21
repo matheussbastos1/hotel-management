@@ -21,6 +21,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private ReservationRepositoryImpl() {
         loadData();
     }
+
     public static ReservationRepositoryImpl getInstance() {
         if (instance == null) {
             instance = new ReservationRepositoryImpl();

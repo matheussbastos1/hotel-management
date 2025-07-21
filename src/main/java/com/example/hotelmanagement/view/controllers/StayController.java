@@ -58,7 +58,7 @@ public class StayController {
         // Inicialização dos controladores de negócio (injeção manual simplificada)
         // Em um projeto maior, usaria um framework de injeção de dependências (ex: Spring)
         // Ou um método de factory para os controladores.
-        RoomRepositoryImpl roomRepository = new RoomRepositoryImpl();
+        RoomRepositoryImpl roomRepository = RoomRepositoryImpl.getInstance();
         ReservationRepositoryImpl reservationRepository = ReservationRepositoryImpl.getInstance();
         GuestRepositoryImpl guestRepository = new GuestRepositoryImpl();
         // Adicione esta linha junto com os outros repositórios

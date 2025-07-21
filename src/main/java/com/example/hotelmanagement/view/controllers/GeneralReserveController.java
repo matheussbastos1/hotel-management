@@ -31,8 +31,7 @@ public class GeneralReserveController {
     // --- Repositórios para Acesso aos Dados ---
     private final GuestRepository guestRepository = new GuestRepositoryImpl();
     private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
-    private final RoomRepository roomRepository = new RoomRepositoryImpl();
-
+    private final RoomRepository roomRepository = RoomRepositoryImpl.getInstance();
 
     // --- Componentes da Tela (Ligados ao FXML) ---
     @FXML private TextField nameField;
@@ -105,49 +104,53 @@ public class GeneralReserveController {
     /**
      * Ação do botão "Salvar Reserva".
      */
-    @FXML
-    private void handleSalvarReserva() {
-        try {
-            Guest principalGuest = new Guest();
-            principalGuest.setName(nameField.getText());
-            principalGuest.setCpf(cpfld.getText());
-            principalGuest.setEmail(emailField.getText());
-            principalGuest.setPhone(phoneField.getText());
-            principalGuest.setAddress(addressField.getText());
+   // src/main/java/com/example/hotelmanagement/view/controllers/GeneralReserveController.java
+   @FXML
+   private void handleSalvarReserva() {
+       try {
+           Guest principalGuest = new Guest();
+           principalGuest.setName(nameField.getText());
+           principalGuest.setCpf(cpfld.getText());
+           principalGuest.setEmail(emailField.getText());
+           principalGuest.setPhone(phoneField.getText());
+           principalGuest.setAddress(addressField.getText());
 
-            guestRepository.addGuest(principalGuest);
+           guestRepository.addGuest(principalGuest);
 
-            List<Guest> companionsList = new ArrayList<>();
-            for (Node formNode : companionForms) {
-                TextField name = (TextField) formNode.lookup("#companionNameField");
-                TextField doc = (TextField) formNode.lookup("#companionDocField");
+           List<Guest> companionsList = new ArrayList<>();
+           for (Node formNode : companionForms) {
+               TextField name = (TextField) formNode.lookup("#companionNameField");
+               TextField doc = (TextField) formNode.lookup("#companionDocField");
 
-                if (name != null && !name.getText().isEmpty()) {
-                    Guest companion = new Guest();
-                    companion.setName(name.getText());
-                    companion.setCpf(doc.getText());
-                    companionsList.add(companion);
-                    // Lembre-se: não salvamos acompanhantes no repositório de guests
-                }
-            }
+               if (name != null && !name.getText().isEmpty()) {
+                   Guest companion = new Guest();
+                   companion.setName(name.getText());
+                   companion.setCpf(doc.getText());
+                   companionsList.add(companion);
+               }
+           }
 
-            Reservation reservation = new Reservation();
-            reservation.setPrincipalGuest(principalGuest);
-            reservation.setCompanions(companionsList);
-            reservation.setRoom(roomComboBox.getValue());
-            reservation.setCheckInDate(checkInDatePicker.getValue());
-            reservation.setCheckOutDate(checkOutDatePicker.getValue());
-            reservation.setStatus(ReservationStatus.BEGGAR);
-            reservationRepository.addReservation(reservation);
+           Reservation reservation = new Reservation();
+           reservation.setPrincipalGuest(principalGuest);
+           reservation.setGuest(principalGuest); // <-- Corrigido: preenche o campo guest
+           reservation.setCompanions(companionsList);
+           reservation.setRoom(roomComboBox.getValue());
+           reservation.setCheckInDate(checkInDatePicker.getValue());
+           reservation.setCheckOutDate(checkOutDatePicker.getValue());
+           reservation.setStatus(ReservationStatus.BEGGAR);
+           reservation.setCreatedAt(java.time.LocalDateTime.now());
+           reservation.setUpdatedAt(java.time.LocalDateTime.now());
 
-            showAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Reserva criada com sucesso.");
-            limparCampos();
+           reservationRepository.addReservation(reservation);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro ao salvar: " + e.getMessage());
-        }
-    }
+           showAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Reserva criada com sucesso.");
+           limparCampos();
+
+       } catch (Exception e) {
+           e.printStackTrace();
+           showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro ao salvar: " + e.getMessage());
+       }
+   }
     @FXML
     private void handleVoltar(javafx.event.ActionEvent event) {
         try {

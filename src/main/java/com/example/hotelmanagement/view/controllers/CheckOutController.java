@@ -26,10 +26,9 @@ import java.util.Optional;
 
 public class CheckOutController {
 
-    // --- Repositórios ---
-    private final RoomRepository roomRepository = new RoomRepositoryImpl();
+    private final RoomRepository roomRepository = RoomRepositoryImpl.getInstance();
+
     private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
-    // --- Componentes FXML ---
     @FXML private ComboBox<Room> occupiedRoomsComboBox;
     @FXML private VBox checkoutDetailsPane;
     @FXML private Label guestInfoLabel;
@@ -39,8 +38,10 @@ public class CheckOutController {
     @FXML private Label servicesSubtotalLabel;
     @FXML private Label totalAmountLabel;
     @FXML private Button finalizeButton;
+    @FXML private Button obterPagamentoButton;
 
     private Reservation currentReservation;
+    private double totalCost = 0.0;
 
     @FXML
     public void initialize() {
@@ -70,14 +71,10 @@ public class CheckOutController {
 
             // --- Cálculos ---
             long numberOfNights = ChronoUnit.DAYS.between(currentReservation.getCheckInDate(), currentReservation.getCheckOutDate());
-            if (numberOfNights == 0) numberOfNights = 1; // Mínimo de 1 diária
-
+            if (numberOfNights == 0) numberOfNights = 1;
             double stayCost = numberOfNights * room.getPrice();
-            double servicesCost = 0.0; // Lógica para buscar serviços viria aqui
-
-            double totalCost = stayCost + servicesCost;
-
-            // --- Exibe na Tela ---
+            double servicesCost = 0.0;
+            totalCost = stayCost + servicesCost;
             guestInfoLabel.setText("Hóspede: " + currentReservation.getPrincipalGuest().getName());
             stayDetailsLabel.setText(numberOfNights + " noite(s) x R$ " + String.format("%.2f", room.getPrice()));
             staySubtotalLabel.setText("Subtotal Estadia: R$ " + String.format("%.2f", stayCost));
@@ -91,11 +88,13 @@ public class CheckOutController {
             checkoutDetailsPane.setVisible(true);
             checkoutDetailsPane.setManaged(true);
             finalizeButton.setDisable(false);
+            obterPagamentoButton.setDisable(false);
         } else {
             // Caso não encontre uma reserva (situação de erro)
             checkoutDetailsPane.setVisible(false);
             checkoutDetailsPane.setManaged(false);
             finalizeButton.setDisable(true);
+            obterPagamentoButton.setDisable(true);
             showAlert(Alert.AlertType.ERROR, "Erro", "Nenhuma reserva ativa encontrada para o quarto " + room.getRoomNumber());
         }
     }
@@ -122,7 +121,7 @@ public class CheckOutController {
                 Room roomToCheckout = currentReservation.getRoom();
                 roomToCheckout.setStatus(RoomStatus.AVAILABLE);
                 try {
-                        roomRepository.updateRoom(roomToCheckout);
+                    roomRepository.updateRoom(roomToCheckout);
                 } catch (RoomNotFoundException e) {
                     showAlert(Alert.AlertType.ERROR, "Erro", "Quarto não encontrado para atualização.");
                 }
@@ -135,11 +134,37 @@ public class CheckOutController {
         });
     }
 
+    @FXML
+    private void handleObterPagamento(ActionEvent event) {
+        if (currentReservation == null) {
+            showAlert(Alert.AlertType.ERROR, "Erro", "Selecione um quarto ocupado para obter o pagamento.");
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/payment-screen.fxml"));
+            Parent paymentRoot = loader.load();
+            PaymentController paymentController = loader.getController();
+            paymentController.setAmount(totalCost);
+
+            Stage stage = new Stage();
+            stage.setTitle("Pagamento");
+            stage.setScene(new Scene(paymentRoot));
+            stage.show();
+
+            // Fecha a tela de checkout
+            Stage checkoutStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            checkoutStage.close();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível abrir a tela de pagamento.");
+        }
+    }
+
     private void resetScreen() {
         occupiedRoomsComboBox.getSelectionModel().clearSelection();
         checkoutDetailsPane.setVisible(false);
         checkoutDetailsPane.setManaged(false);
         finalizeButton.setDisable(true);
+        obterPagamentoButton.setDisable(true);
         currentReservation = null;
         List<Room> occupiedRooms = roomRepository.getRoomsByStatus(RoomStatus.OCCUPIED);
         occupiedRoomsComboBox.setItems(FXCollections.observableArrayList(occupiedRooms));

@@ -30,20 +30,18 @@ public class RoomFormController {
     @FXML private TextField maxOccupancyField;
     @FXML private TextField bedTypeField;
 
-    private RoomController roomController; // Injeção de dependência do controlador
-    private Room roomToEdit; // Para preencher o formulário se estiver editando
-
+    private RoomController roomController;
+    private Room roomToEdit;
 
     public void setRoomController(RoomController roomController) {
         this.roomController = roomController;
     }
 
-    // Método para pré-preencher o formulário em modo de edição
     public void setRoom(Room room) {
         this.roomToEdit = room;
         if (roomToEdit != null) {
             roomNumberField.setText(String.valueOf(roomToEdit.getRoomNumber()));
-            roomNumberField.setEditable(false); // Não permite editar o número do quarto em modo de edição
+            roomNumberField.setEditable(false);
             roomTypeComboBox.getSelectionModel().select(roomToEdit.getRoomType().name());
             priceField.setText(String.valueOf(roomToEdit.getPrice()));
             statusComboBox.getSelectionModel().select(roomToEdit.getStatus().name());
@@ -54,14 +52,12 @@ public class RoomFormController {
 
     @FXML
     public void initialize() {
-        // Preenche o ComboBox de Tipos de Quarto
         roomTypeComboBox.setItems(FXCollections.observableArrayList(
                 Arrays.stream(RoomType.values())
                         .map(Enum::name)
                         .collect(Collectors.toList())
         ));
 
-        // Preenche o ComboBox de Status do Quarto
         statusComboBox.setItems(FXCollections.observableArrayList(
                 Arrays.stream(RoomStatus.values())
                         .map(Enum::name)
@@ -69,7 +65,7 @@ public class RoomFormController {
         ));
     }
 
-   @FXML
+    @FXML
     private void handleSave(ActionEvent event) {
         if (validateFields()) {
             try {
@@ -104,13 +100,18 @@ public class RoomFormController {
     }
 
     @FXML
-    private void handleVoltar(javafx.event.ActionEvent event) {
+    private void handleVoltar(ActionEvent event) {
         try {
+            // Reabre o dashboard e fecha esta janela
             Parent root = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Dashboard Principal");
-            stage.show();
+            Stage dashboardStage = new Stage();
+            dashboardStage.setTitle("Dashboard Principal");
+            dashboardStage.setScene(new Scene(root));
+            dashboardStage.show();
+
+            // Fecha a janela atual (formulário de quartos)
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -183,7 +184,6 @@ public class RoomFormController {
     }
 
     private void closeForm() {
-        // Obtém o Stage (janela) atual e o fecha
         Stage stage = (Stage) roomNumberField.getScene().getWindow();
         stage.close();
     }
