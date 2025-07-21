@@ -61,9 +61,10 @@
                     <Insets top="15.0" />
                 </padding>
                 <Button fx:id="saveButton" onAction="#handleSave" text="Salvar" styleClass="save-button"/>
-                <Button fx:id="cancelButton" onAction="#handleCancel" text="Cancelar" styleClass="cancel-button"/>
+                <Button fx:id="removeButton" onAction="#handleRemove" text="Remover" styleClass="danger-button"/>
                 <Button text="Voltar" onAction="#handleVoltar" styleClass="secondary-button"/>
             </HBox>
+
         </children>
     </VBox>
 </VBox>

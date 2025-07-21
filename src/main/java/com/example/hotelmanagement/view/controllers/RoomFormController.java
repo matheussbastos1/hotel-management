@@ -13,12 +13,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RoomFormController {
@@ -29,6 +33,7 @@ public class RoomFormController {
     @FXML private ComboBox<String> statusComboBox;
     @FXML private TextField maxOccupancyField;
     @FXML private TextField bedTypeField;
+    @FXML private Button removeButton;  // Adicionar este campo
 
     private RoomController roomController;
     private Room roomToEdit;
@@ -48,6 +53,7 @@ public class RoomFormController {
             maxOccupancyField.setText(String.valueOf(roomToEdit.getMaxOccupancy()));
             bedTypeField.setText(roomToEdit.getBedType());
         }
+        // Botão remover sempre visível agora
     }
 
     @FXML
@@ -63,6 +69,11 @@ public class RoomFormController {
                         .map(Enum::name)
                         .collect(Collectors.toList())
         ));
+
+        // Mostrar sempre o botão remover
+        if (removeButton != null) {
+            removeButton.setVisible(true);
+        }
     }
 
     @FXML
@@ -116,23 +127,37 @@ public class RoomFormController {
     }
 
     @FXML
-    private void handleVoltar(ActionEvent event) {
+    private void handleRemove(ActionEvent event) {
         try {
-            // Simplesmente fecha a janela atual do formulário
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RemoveRoomForm.fxml"));
+            Parent root = loader.load();
 
-            // O Dashboard já estava aberto, então não precisamos criar uma nova instância
+            // Passar o controller para a nova janela
+            RemoveRoomController removeController = loader.getController();
+            removeController.setRoomController(this.roomController);
 
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível fechar a janela: " + e.getMessage());
+            Stage removeStage = new Stage();
+            removeStage.setTitle("Remover Quarto");
+            removeStage.setScene(new Scene(root));
+            removeStage.setResizable(false);
+            removeStage.initModality(Modality.APPLICATION_MODAL);
+            removeStage.show();
+
+        } catch (IOException e) {
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível abrir a tela de remoção: " + e.getMessage());
         }
     }
 
     @FXML
-    private void handleCancel(ActionEvent event) {
-        closeForm();
+    private void handleVoltar(ActionEvent event) {
+        try {
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível fechar a janela: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private boolean validateFields() {
@@ -199,5 +224,17 @@ public class RoomFormController {
     private void closeForm() {
         Stage stage = (Stage) roomNumberField.getScene().getWindow();
         stage.close();
+    }
+
+    // Método auxiliar para limpar os campos
+    private void clearFields() {
+        roomNumberField.clear();
+        roomNumberField.setEditable(true); // Permitir edição novamente
+        roomTypeComboBox.getSelectionModel().clearSelection();
+        priceField.clear();
+        statusComboBox.getSelectionModel().clearSelection();
+        maxOccupancyField.clear();
+        bedTypeField.clear();
+        roomToEdit = null;
     }
 }
