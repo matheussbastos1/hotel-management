@@ -10,12 +10,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="15.0" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.FinancialReportController">
+<VBox alignment="TOP_CENTER" spacing="15.0" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.StayReportController">
     <padding>
         <Insets top="25.0" right="25.0" bottom="25.0" left="25.0" />
     </padding>
     <children>
-        <Label text="Histórico de Pagamentos" styleClass="dashboard-title" />
+        <Label text="Relatório de Estadias" styleClass="dashboard-title" />
 
         <HBox alignment="BOTTOM_LEFT" spacing="30.0" style="-fx-padding: 10 0 10 0;">
             <VBox spacing="5.0">
@@ -37,20 +37,20 @@
             </VBox>
         </HBox>
 
-        <TableView fx:id="paymentsTableView" VBox.vgrow="ALWAYS">
+        <TableView fx:id="staysTableView" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="paymentIdColumn" text="ID Pgto." prefWidth="80.0" />
-                <TableColumn fx:id="guestNameColumn" prefWidth="200.0" text="Hóspede" />
-                <TableColumn fx:id="roomColumn" prefWidth="80.0" text="Quarto" />
-                <TableColumn fx:id="paymentDateColumn" prefWidth="150.0" text="Data do Pagamento" />
-                <TableColumn fx:id="amountColumn" prefWidth="120.0" text="Valor Pago" />
-                <TableColumn fx:id="methodColumn" prefWidth="120.0" text="Método" />
-                <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
+                <TableColumn fx:id="reservationIdColumn" text="ID Reserva" prefWidth="100.0" />
+                <TableColumn fx:id="guestNameColumn" text="Hóspede" prefWidth="200.0" />
+                <TableColumn fx:id="roomNumberColumn" text="Quarto" prefWidth="80.0" />
+                <TableColumn fx:id="checkInDateColumn" text="Check-in" prefWidth="120.0" />
+                <TableColumn fx:id="checkOutDateColumn" text="Check-out" prefWidth="120.0" />
+                <TableColumn fx:id="nightsColumn" text="Noites" prefWidth="80.0" />
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="120.0" />
             </columns>
         </TableView>
 
         <VBox alignment="CENTER" spacing="10.0">
-            <Label fx:id="totalAmountLabel" text="Total: R$ 0,00" styleClass="dashboard-title" />
+            <Label fx:id="totalStaysLabel" text="Total de Estadias: 0" styleClass="dashboard-title" />
             <HBox alignment="CENTER" spacing="15.0">
                 <Button text="Atualizar" onAction="#handleRefresh" styleClass="primary-button" />
                 <Button onAction="#handleVoltar" text="Voltar ao Hub de Relatórios" styleClass="secondary-button" />

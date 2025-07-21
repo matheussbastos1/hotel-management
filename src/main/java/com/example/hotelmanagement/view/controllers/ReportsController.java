@@ -19,7 +19,15 @@ public class ReportsController {
      */
     @FXML
     private void handleOpenEstadiaReport(ActionEvent event) {
-        loadReportScreen("/StayView.fxml", "Relatório de Estadias", event);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/StayReportView.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Relatório de Estadias");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

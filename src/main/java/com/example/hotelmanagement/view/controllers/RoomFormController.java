@@ -67,6 +67,8 @@ public class RoomFormController {
 
     @FXML
     private void handleSave(ActionEvent event) {
+        System.out.println("Iniciando salvamento do quarto...");
+
         if (validateFields()) {
             try {
                 int roomNumber = Integer.parseInt(roomNumberField.getText().trim());
@@ -76,43 +78,54 @@ public class RoomFormController {
                 int maxOccupancy = Integer.parseInt(maxOccupancyField.getText().trim());
                 String bedType = bedTypeField.getText().trim();
 
+                System.out.println("Criando quarto: " + roomNumber);
                 Room room = new Room(roomNumber, roomType, price, status, maxOccupancy, bedType);
 
                 if (roomToEdit == null) {
+                    System.out.println("Adicionando novo quarto...");
                     roomController.add(room);
                     showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Quarto adicionado com sucesso!");
                 } else {
+                    System.out.println("Atualizando quarto existente...");
                     roomController.update(room);
                     showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Quarto atualizado com sucesso!");
                 }
-                closeForm();
+
+                System.out.println("Quarto salvo com sucesso!");
+
             } catch (NumberFormatException e) {
-                showAlert(Alert.AlertType.ERROR, "Erro de Entrada", "Por favor, insira valores numéricos válidos para Número do Quarto, Preço e Ocupação Máxima.");
+                System.err.println("Erro de formato numérico: " + e.getMessage());
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erro de Entrada", "Por favor, insira valores numéricos válidos.");
             } catch (IllegalArgumentException e) {
-                showAlert(Alert.AlertType.ERROR, "Erro de Seleção", "Por favor, selecione um Tipo de Quarto e um Status válidos.");
+                System.err.println("Erro de argumento: " + e.getMessage());
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erro de Seleção", "Por favor, selecione valores válidos.");
             } catch (RoomNotFoundException e) {
+                System.err.println("Quarto não encontrado: " + e.getMessage());
+                e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Erro", e.getMessage());
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro ao salvar o quarto: " + e.getMessage());
+                System.err.println("Erro inesperado: " + e.getMessage());
                 e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro inesperado: " + e.getMessage());
             }
+        } else {
+            System.out.println("Validação dos campos falhou");
         }
     }
 
     @FXML
     private void handleVoltar(ActionEvent event) {
         try {
-            // Reabre o dashboard e fecha esta janela
-            Parent root = FXMLLoader.load(getClass().getResource("/DashboardForm.fxml"));
-            Stage dashboardStage = new Stage();
-            dashboardStage.setTitle("Dashboard Principal");
-            dashboardStage.setScene(new Scene(root));
-            dashboardStage.show();
-
-            // Fecha a janela atual (formulário de quartos)
+            // Simplesmente fecha a janela atual do formulário
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
-        } catch (IOException e) {
+
+            // O Dashboard já estava aberto, então não precisamos criar uma nova instância
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro", "Não foi possível fechar a janela: " + e.getMessage());
             e.printStackTrace();
         }
     }
