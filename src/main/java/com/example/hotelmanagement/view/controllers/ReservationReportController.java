@@ -2,6 +2,7 @@ package com.example.hotelmanagement.view.controllers;
 
 import com.example.hotelmanagement.dto.ReservationDetailsDTO;
 import com.example.hotelmanagement.models.Reservation;
+import com.example.hotelmanagement.models.ReservationStatus;
 import com.example.hotelmanagement.repository.ReservationRepository;
 import com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl;
 import com.example.hotelmanagement.util.ReportExporter;
@@ -105,10 +106,10 @@ public class ReservationReportController {
             dto.setRoomStatus(reservation.getRoom().getStatus());
             dto.setRoomPrice(reservation.getRoom().getPrice());
 
-            // Cálculo do valor total (número de noites * preço do quarto)
+            // Cálculo do valor total
             long nights = java.time.temporal.ChronoUnit.DAYS.between(
                     reservation.getCheckInDate(), reservation.getCheckOutDate());
-            if (nights == 0) nights = 1; // Mínimo de 1 noite
+            if (nights == 0) nights = 1;
             double totalAmount = nights * reservation.getRoom().getPrice();
             dto.setTotalAmount(BigDecimal.valueOf(totalAmount));
         }
@@ -121,9 +122,20 @@ public class ReservationReportController {
             dto.setGuestPhone(reservation.getPrincipalGuest().getPhone());
         }
 
-        // Status de pagamento (simplificado por enquanto)
-        dto.setIsPaid(false);
-        dto.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.PENDING);
+        // Status de pagamento baseado no status da reserva
+        if (reservation.getStatus() == ReservationStatus.CHECKED_OUT) {
+            dto.setIsPaid(true);
+            dto.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.COMPLETED);
+            dto.setPaymentMethod("Pago no Checkout");
+        } else if (reservation.getStatus() == ReservationStatus.CHECKED_IN) {
+            dto.setIsPaid(false);
+            dto.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.PENDING);
+            dto.setPaymentMethod("Pendente");
+        } else {
+            dto.setIsPaid(false);
+            dto.setPaymentStatus(com.example.hotelmanagement.models.PaymentStatus.PENDING);
+            dto.setPaymentMethod("Pendente");
+        }
 
         return dto;
     }
@@ -222,5 +234,11 @@ public class ReservationReportController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleRefresh() {
+        loadReservations();
+        showAlert(Alert.AlertType.INFORMATION, "Atualizado", "Relatório atualizado com sucesso!");
     }
 }
