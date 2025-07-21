@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" styleClass="root" stylesheets="@DashboardStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.view.controllers.GuestListController">
+    <padding>
+        <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+    </padding>
+    <children>
+        <Label styleClass="dashboard-title" text="Gerenciar Hóspedes" />
+
+        <HBox alignment="CENTER" spacing="10.0">
+            <TextField fx:id="searchField" prefWidth="400.0" promptText="Buscar por nome ou CPF..." />
+            <Button onAction="#handleBuscar" styleClass="secondary-button" text="Buscar" />
+            <Button onAction="#handleLimparBusca" styleClass="cancel-button" text="Limpar" />
+        </HBox>
+
+        <TableView fx:id="guestsTableView" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60.0" />
+                <TableColumn fx:id="nameColumn" text="Nome" prefWidth="200.0" />
+                <TableColumn fx:id="cpfColumn" text="CPF" prefWidth="120.0" />
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="180.0" />
+                <TableColumn fx:id="phoneColumn" text="Telefone" prefWidth="120.0" />
+                <TableColumn fx:id="actionsColumn" text="Ações" prefWidth="150.0" />
+            </columns>
+        </TableView>
+
+        <HBox alignment="CENTER" spacing="15.0">
+            <Button onAction="#handleNovoHospede" styleClass="save-button" text="Novo Hóspede" />
+            <Button onAction="#handleVoltar" styleClass="secondary-button" text="Voltar ao Dashboard" />
+        </HBox>
+    </children>
+</VBox>

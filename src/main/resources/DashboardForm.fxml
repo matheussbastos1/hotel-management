@@ -17,6 +17,7 @@
                 <Button onAction="#handleAbrirGestaoServicos" prefWidth="180.0" styleClass="nav-button" text="Gerenciar Serviços" />
                 <!-- Botão de Pagamentos removido aqui -->
                 <Button onAction="#handleAbrirRelatorios" prefWidth="180.0" styleClass="nav-button" text="Relatórios" />
+                <Button onAction="#handleAbrirGerenciamentoHospedes" prefWidth="180.0" styleClass="nav-button" text="Gerenciar Hóspedes" />
             </children>
         </VBox>
     </left>

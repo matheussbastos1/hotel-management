@@ -170,5 +170,16 @@ public class DashboardController {
         }
     }
 
-
+    @FXML
+    private void handleAbrirGerenciamentoHospedes() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/GuestListView.fxml"));
+            Stage stage = (Stage) ((Node) dateTimeLabel.getParent()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Gerenciar Hóspedes");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
