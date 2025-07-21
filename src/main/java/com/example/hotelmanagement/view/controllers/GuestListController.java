@@ -47,6 +47,7 @@ public class GuestListController {
         cpfColumn.setCellValueFactory(new PropertyValueFactory<>("cpf"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        actionsColumn.setPrefWidth(210.0);
     }
 
     private void setupActionsColumn() {
