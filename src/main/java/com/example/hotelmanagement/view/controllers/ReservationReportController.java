@@ -41,7 +41,7 @@ public class ReservationReportController {
     @FXML private TableColumn<ReservationDetailsDTO, BigDecimal> totalAmountColumn;
     @FXML private TableColumn<ReservationDetailsDTO, String> paymentStatusColumn;
 
-    private final ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+    private final ReservationRepository reservationRepository = ReservationRepositoryImpl.getInstance();
     private final ObservableList<ReservationDetailsDTO> allReservations = FXCollections.observableArrayList();
 
     @FXML
