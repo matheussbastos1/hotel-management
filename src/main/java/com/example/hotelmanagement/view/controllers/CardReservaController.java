@@ -1,9 +1,6 @@
 package com.example.hotelmanagement.view.controllers;
 
-import com.example.hotelmanagement.models.Guest;
-import com.example.hotelmanagement.models.Reservation;
-import com.example.hotelmanagement.models.Room;
-import com.example.hotelmanagement.models.ReservationStatus;
+import com.example.hotelmanagement.models.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -71,13 +68,52 @@ public class CardReservaController {
 
     @FXML
     private void handleEfetivarCheckin() {
-        // A lógica de efetivar o check-in virá aqui
-        System.out.println("Clicou em Efetivar Check-in");
+        if (reservation == null) return;
+        try {
+            // Atualiza o status da reserva
+            reservation.setStatus(ReservationStatus.CHECKED_IN);
+            reservation.setUpdatedAt(java.time.LocalDateTime.now());
+            com.example.hotelmanagement.repository.ReservationRepository repo =
+                    com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl.getInstance();
+            repo.updateReservation(reservation);
+
+            // Atualiza o status do quarto para OCUPADO
+            Room room = reservation.getRoom();
+            room.setStatus(RoomStatus.OCCUPIED);
+            com.example.hotelmanagement.repository.RoomRepository roomRepo =
+                    com.example.hotelmanagement.repository.impl.RoomRepositoryImpl.getInstance();
+            roomRepo.updateRoom(room);
+
+            // Feedback visual
+            statusLabel.setText("CHECKED_IN");
+            statusLabel.getStyleClass().setAll("card-status-pending");
+            checkinButton.setDisable(true);
+            cancelButton.setDisable(true);
+            System.out.println("Check-in realizado com sucesso!");
+        } catch (Exception e) {
+            System.err.println("Erro ao efetivar check-in: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleCancelarReserva() {
-        // A lógica de cancelar a reserva virá aqui
-        System.out.println("Clicou em Cancelar Reserva");
+        if (reservation == null) return;
+        try {
+            // Atualiza o status da reserva para CANCELLED
+            reservation.setStatus(ReservationStatus.CANCELLED);
+            reservation.setUpdatedAt(java.time.LocalDateTime.now());
+            // Atualiza no repositório
+            com.example.hotelmanagement.repository.ReservationRepository repo =
+                    com.example.hotelmanagement.repository.impl.ReservationRepositoryImpl.getInstance();
+            repo.updateReservation(reservation);
+            // Feedback visual
+            statusLabel.setText("CANCELLED");
+            statusLabel.getStyleClass().setAll("card-status-pending");
+            checkinButton.setDisable(true);
+            cancelButton.setDisable(true);
+            System.out.println("Reserva cancelada com sucesso!");
+        } catch (Exception e) {
+            System.err.println("Erro ao cancelar reserva: " + e.getMessage());
+        }
     }
 }
